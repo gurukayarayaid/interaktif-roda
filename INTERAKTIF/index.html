@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Edukasi Store - Produk Game Legal & Terpercaya</title>
+    <!-- Menggunakan Tailwind CSS untuk desain yang modern -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="bg-slate-900 border-b border-slate-800 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center relative">
+            <a href="#" class="text-2xl font-black tracking-wider text-indigo-500">GAME<span class="text-white">EDUKASI</span></a>
+            
+            <div class="flex items-center gap-4">
+                <span class="hidden md:inline-block text-xs bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded-full font-medium border border-emerald-500/20">Layanan Aktif</span>
+                
+                <!-- TOMBOL HUBUNGI ADMIN & DROPDOWN -->
+                <div class="relative inline-block text-left">
+                    <button onclick="toggleDropdownHubungi(event)" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors cursor-pointer text-sm flex items-center gap-1.5 shadow-lg shadow-indigo-900/30">
+                        Hubungi Admin
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    
+                    <!-- Menu Opsi Hubungi -->
+                    <div id="dropdownHubungi" class="hidden absolute right-0 mt-2 w-56 rounded-xl bg-slate-950 border border-slate-800 shadow-2xl z-50 overflow-hidden transform opacity-0 scale-95 transition-all duration-100">
+                        <div class="py-1" role="none">
+                            <!-- WhatsApp -->
+                            <a href="https://api.whatsapp.com/send?phone=6285645157395&text=Halo%20Admin%20Game%20Edukasi,%20saya%20ingin%20bertanya%20mengenai%20produk%20game." target="_blank" onclick="tutupDropdownHubungi()" class="flex items-center gap-2.5 px-4 py-3 text-sm text-slate-300 hover:bg-slate-900 hover:text-emerald-400 transition-colors border-b border-slate-900/50" role="menuitem">
+                                <span class="flex h-2 w-2 rounded-full bg-emerald-400"></span>
+                                Hubungi via WhatsApp
+                            </a>
+                            <!-- Email -->
+                            <a href="mailto:guru.kayaraya.id@gmail.com?subject=Tanya%20Produk%20Game%20Edukasi" onclick="tutupDropdownHubungi()" class="flex items-center gap-2.5 px-4 py-3 text-sm text-slate-300 hover:bg-slate-900 hover:text-indigo-400 transition-colors" role="menuitem">
+                                <span class="flex h-2 w-2 rounded-full bg-indigo-400"></span>
+                                Hubungi via Email
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <header class="max-w-6xl mx-auto px-4 py-12 text-center">
+        <h1 class="text-4xl md:text-5xl font-extrabold mb-4 bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">Pusat Layanan Game Edukasi Terpercaya</h1>
+        <p class="text-slate-400 max-w-xl mx-auto text-sm md:text-base">Proses aman, terpercaya, dan produk langsung dikirim ke alamat email aktif Anda secara otomatis setelah konfirmasi sukses.</p>
+    </header>
+
+    <!-- DAFTAR PRODUK GAME -->
+    <main class="max-w-6xl mx-auto px-4 pb-16">
+        <h2 class="text-2xl font-bold mb-8 tracking-tight text-center md:text-left">Katalog Produk Game Edukasi</h2>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            
+            <!-- PRODUK 1: LAGU DAERAH -->
+            <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-lg flex flex-col justify-between hover:border-slate-700 transition-all">
+                <div>
+                    <img src="lagudaerah.png" alt="Game Edukasi Lagu Daerah" class="w-full h-48 object-cover object-top border-b border-slate-800">
+                    <div class="p-5">
+                        <div class="bg-indigo-500/10 text-indigo-400 text-xs font-bold px-2.5 py-1 rounded w-fit mb-3">Budaya & Seni</div>
+                        <h3 class="text-lg font-bold text-white mb-2">Game Edukasi Lagu Daerah</h3>
+                        <p class="text-xs text-slate-400">Game interaktif seru untuk menebak asal provinsi berdasarkan judul lagu daerah Nusantara yang muncul secara acak.</p>
+                    </div>
+                </div>
+                <div class="p-5 pt-0 bg-slate-900/50 border-t border-slate-800/50">
+                    <div class="text-xl font-black text-white my-3">Rp 39.000</div>
+                    <button onclick="bukaModal('Game Edukasi Lagu Daerah', 39000)" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors cursor-pointer text-center text-xs">Beli Sekarang</button>
+                </div>
+            </div>
+
+            <!-- PRODUK 2: LAMBANG PANCASILA -->
+            <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-lg flex flex-col justify-between hover:border-slate-700 transition-all">
+                <div>
+                    <img src="pancasila.png" alt="Pasangkan Lambang Pancasila" class="w-full h-48 object-cover object-top border-b border-slate-800">
+                    <div class="p-5">
+                        <div class="bg-rose-500/10 text-rose-400 text-xs font-bold px-2.5 py-1 rounded w-fit mb-3">Kewarganegaraan</div>
+                        <h3 class="text-lg font-bold text-white mb-2">Pasangkan Lambang Pancasila</h3>
+                        <p class="text-xs text-slate-400">Melatih pemahaman dasar negara dengan menjodohkan simbol/lambang Pancasila ke kotak kosong di samping bunyi silanya.</p>
+                    </div>
+                </div>
+                <div class="p-5 pt-0 bg-slate-900/50 border-t border-slate-800/50">
+                    <div class="text-xl font-black text-white my-3">Rp 39.000</div>
+                    <button onclick="bukaModal('Pasangkan Lambang Pancasila', 39000)" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors cursor-pointer text-center text-xs">Beli Sekarang</button>
+                </div>
+            </div>
+
+            <!-- PRODUK 3: RODA ACAK BERPUTAR -->
+            <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-lg flex flex-col justify-between hover:border-slate-700 transition-all">
+                <div>
+                    <img src="roda.png" alt="Roda Acak Berputar" class="w-full h-48 object-cover object-top border-b border-slate-800">
+                    <div class="p-5">
+                        <div class="bg-emerald-500/10 text-emerald-400 text-xs font-bold px-2.5 py-1 rounded w-fit mb-3">Alat Bantu Kelas</div>
+                        <h3 class="text-lg font-bold text-white mb-2">Roda Acak Berputar</h3>
+                        <p class="text-xs text-slate-400">Media interaktif untuk mengundi daftar nama siswa secara adil, interaktif, dan menyenangkan dalam satu klik.</p>
+                    </div>
+                </div>
+                <div class="p-5 pt-0 bg-slate-900/50 border-t border-slate-800/50">
+                    <div class="text-xl font-black text-white my-3">Rp 39.000</div>
+                    <div class="flex gap-2">
+                        <a href="roda.html" target="_blank" class="w-1/2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold py-2 px-3 rounded-lg transition-colors text-center text-xs flex items-center justify-center">Coba Demo</a>
+                        <button onclick="bukaModal('Roda Acak Berputar', 39000)" class="w-1/2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2 px-3 rounded-lg transition-colors cursor-pointer text-center text-xs">Beli</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRODUK 4: SUKU & PROVINSI -->
+            <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-lg flex flex-col justify-between hover:border-slate-700 transition-all">
+                <div>
+                    <img src="suku.png" alt="Game Edukasi Suku & Provinsi" class="w-full h-48 object-cover object-top border-b border-slate-800">
+                    <div class="p-5">
+                        <div class="bg-amber-500/10 text-amber-400 text-xs font-bold px-2.5 py-1 rounded w-fit mb-3">Pengetahuan Sosial</div>
+                        <h3 class="text-lg font-bold text-white mb-2">Game Edukasi Suku & Provinsi</h3>
+                        <p class="text-xs text-slate-400">Membantu mengenali keragaman budaya nasional dengan memasangkan nama suku bangsa sesuai dengan provinsi asal yang tepat.</p>
+                    </div>
+                </div>
+                <div class="p-5 pt-0 bg-slate-900/50 border-t border-slate-800/50">
+                    <div class="text-xl font-black text-white my-3">Rp 39.000</div>
+                    <button onclick="bukaModal('Game Edukasi Suku & Provinsi', 39000)" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors cursor-pointer text-center text-xs">Beli Sekarang</button>
+                </div>
+            </div>
+
+            <!-- PRODUK 5: KUIS PINTAR BAHASA INDONESIA -->
+            <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-lg flex flex-col justify-between hover:border-slate-700 transition-all">
+                <div>
+                    <img src="bahasa.png" alt="Kuis Pintar Bahasa Indonesia" class="w-full h-48 object-cover object-top border-b border-slate-800">
+                    <div class="p-5">
+                        <div class="bg-cyan-500/10 text-cyan-400 text-xs font-bold px-2.5 py-1 rounded w-fit mb-3">Bahasa & Sastra</div>
+                        <h3 class="text-lg font-bold text-white mb-2">Kuis Pintar Bahasa Indonesia</h3>
+                        <p class="text-xs text-slate-400">Media belajar interaktif penunjang kelas 3 SD semester ganjil untuk mengasah pemahaman tata bahasa, kosakata, dan menyusun kalimat.</p>
+                    </div>
+                </div>
+                <div class="p-5 pt-0 bg-slate-900/50 border-t border-slate-800/50">
+                    <div class="text-xl font-black text-white my-3">Rp 39.000</div>
+                    <button onclick="bukaModal('Kuis Pintar Bahasa Indonesia', 39000)" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors cursor-pointer text-center text-xs">Beli Sekarang</button>
+                </div>
+            </div>
+
+            <!-- PRODUK 6: PRE-TEST DIAGNOSTIK BAHASA INDONESIA -->
+            <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-lg flex flex-col justify-between hover:border-slate-700 transition-all">
+                <div>
+                    <img src="pre_bahasa.png" alt="Pre-Test Diagnostik Bahasa Indonesia" class="w-full h-48 object-cover object-top border-b border-slate-800">
+                    <div class="p-5">
+                        <div class="bg-emerald-500/10 text-emerald-400 text-xs font-bold px-2.5 py-1 rounded w-fit mb-3">Asesmen Dasar</div>
+                        <h3 class="text-lg font-bold text-white mb-2">Pre-Test Diagnostik BI</h3>
+                        <p class="text-xs text-slate-400">Game evaluasi awal untuk memetakan capaian serta kemampuan membaca dan menulis siswa kelas 3 sebelum masuk ke materi inti.</p>
+                    </div>
+                </div>
+                <div class="p-5 pt-0 bg-slate-900/50 border-t border-slate-800/50">
+                    <div class="text-xl font-black text-white my-3">Rp 39.000</div>
+                    <button onclick="bukaModal('Pre-Test Diagnostik Bahasa Indonesia', 39000)" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors cursor-pointer text-center text-xs">Beli Sekarang</button>
+                </div>
+            </div>
+
+            <!-- PRODUK 7: PRE-TEST DIAGNOSTIK BAHASA INGGRIS -->
+            <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-lg flex flex-col justify-between hover:border-slate-700 transition-all">
+                <div>
+                    <img src="pre_inggris.png" alt="Pre-Test Diagnostik Bahasa Inggris" class="w-full h-48 object-cover object-top border-b border-slate-800">
+                    <div class="p-5">
+                        <div class="bg-purple-500/10 text-purple-400 text-xs font-bold px-2.5 py-1 rounded w-fit mb-3">Bahasa Asing</div>
+                        <h3 class="text-lg font-bold text-white mb-2">Pre-Test Diagnostik English</h3>
+                        <p class="text-xs text-slate-400">Kuis interaktif berbasis waktu untuk menguji pengenalan kosakata dasar (vocabulary) dan kalimat sapaan awal Bahasa Inggris kelas 3.</p>
+                    </div>
+                </div>
+                <div class="p-5 pt-0 bg-slate-900/50 border-t border-slate-800/50">
+                    <div class="text-xl font-black text-white my-3">Rp 39.000</div>
+                    <button onclick="bukaModal('Pre-Test Diagnostik Bahasa Inggris', 39000)" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors cursor-pointer text-center text-xs">Beli Sekarang</button>
+                </div>
+            </div>
+
+            <!-- PRODUK 8: PRE-TEST DIAGNOSTIK MATEMATIKA -->
+            <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-lg flex flex-col justify-between hover:border-slate-700 transition-all">
+                <div>
+                    <img src="pre_matematika.png" alt="Pre-Test Diagnostik Matematika" class="w-full h-48 object-cover object-top border-b border-slate-800">
+                    <div class="p-5">
+                        <div class="bg-amber-500/10 text-amber-400 text-xs font-bold px-2.5 py-1 rounded w-fit mb-3">Berhitung & Logika</div>
+                        <h3 class="text-lg font-bold text-white mb-2">Pre-Test Diagnostik Matematika</h3>
+                        <p class="text-xs text-slate-400">Asesmen numerasi seru untuk menguji operasi hitung penjumlahan, nilai tempat bilangan, dan logika dasar perkalian/pembagian kelas 3 SD.</p>
+                    </div>
+                </div>
+                <div class="p-5 pt-0 bg-slate-900/50 border-t border-slate-800/50">
+                    <div class="text-xl font-black text-white my-3">Rp 39.000</div>
+                    <button onclick="bukaModal('Pre-Test Diagnostik Matematika', 39000)" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors cursor-pointer text-center text-xs">Beli Sekarang</button>
+                </div>
+            </div>
+
+            <!-- PRODUK BARU 9: KUIS PINTAR IPA (FOTOSINTESIS) -->
+            <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-lg flex flex-col justify-between hover:border-slate-700 transition-all">
+                <div>
+                    <img src="kuisfoto.png" alt="Kuis Pintar IPA Fotosintesis" class="w-full h-48 object-cover object-top border-b border-slate-800">
+                    <div class="p-5">
+                        <div class="bg-teal-500/10 text-teal-400 text-xs font-bold px-2.5 py-1 rounded w-fit mb-3">Sains & Alam</div>
+                        <h3 class="text-lg font-bold text-white mb-2">Kuis Pintar IPA: Fotosintesis</h3>
+                        <p class="text-xs text-slate-400">Media kuis interaktif seru berbasis nyawa untuk menguji pemahaman siswa mengenai proses pembuatan makanan pada tumbuhan hijau dan ekosistem.</p>
+                    </div>
+                </div>
+                <div class="p-5 pt-0 bg-slate-900/50 border-t border-slate-800/50">
+                    <div class="text-xl font-black text-white my-3">Rp 39.000</div>
+                    <button onclick="bukaModal('Kuis Pintar IPA: Fotosintesis', 39000)" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors cursor-pointer text-center text-xs">Beli Sekarang</button>
+                </div>
+            </div>
+
+            <!-- PRODUK BARU 10: SINAU BASA JAWA (KOSOK BALIK) -->
+            <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-lg flex flex-col justify-between hover:border-slate-700 transition-all">
+                <div>
+                    <img src="basajawa.png" alt="Sinau Basa Jawa Kosok Balik" class="w-full h-48 object-cover object-top border-b border-slate-800">
+                    <div class="p-5">
+                        <div class="bg-fuchsia-500/10 text-fuchsia-400 text-xs font-bold px-2.5 py-1 rounded w-fit mb-3">Bahasa Daerah</div>
+                        <h3 class="text-lg font-bold text-white mb-2">Sinau Basa Jawa: Kosok Balik</h3>
+                        <p class="text-xs text-slate-400">Game edukasi interaktif untuk mengasah kemampuan kosa kata bahasa Jawa, khususnya dalam memahami antonim (kosok baline) suatu tembung.</p>
+                    </div>
+                </div>
+                <div class="p-5 pt-0 bg-slate-900/50 border-t border-slate-800/50">
+                    <div class="text-xl font-black text-white my-3">Rp 39.000</div>
+                    <button onclick="bukaModal('Sinau Basa Jawa: Kosok Balik', 39000)" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors cursor-pointer text-center text-xs">Beli Sekarang</button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- SECTION TABEL INFORMASI LAYANAN -->
+    <section class="max-w-4xl mx-auto px-4 pb-12">
+        <hr class="border-slate-800 mb-12">
+        <h2 class="text-2xl font-bold mb-6 tracking-tight text-center">Layanan Tambahan & Kemitraan</h2>
+        
+        <div class="overflow-hidden border border-slate-800 rounded-xl shadow-xl">
+            <table class="w-full border-collapse text-left text-sm text-slate-300">
+                <thead class="bg-slate-900 text-xs font-bold uppercase tracking-wider text-slate-400 border-b border-slate-800">
+                    <tr>
+                        <th scope="col" class="px-6 py-4 w-1/12">No</th>
+                        <th scope="col" class="px-6 py-4 w-4/12">Layanan Tambahan</th>
+                        <th scope="col" class="px-6 py-4 w-5/12">Deskripsi Keterangan</th>
+                        <th scope="col" class="px-6 py-4 w-2/12 text-center">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800 bg-slate-950/40">
+                    <tr class="hover:bg-slate-900/50 transition-colors">
+                        <td class="px-6 py-5 font-semibold text-indigo-400">1</td>
+                        <td class="px-6 py-5 font-bold text-white text-base">GRATIS Ubah Suai / Custom Soal</td>
+                        <td class="px-6 py-5 text-slate-400 leading-relaxed">Semua produk game edukasi di atas isinya bisa disesuaikan. Anda dapat merevisi daftar soal, materi pertanyaan, pilihan teks, maupun kunci jawaban agar pas dengan materi ajar Anda. Dan ini GRATIS.</td>
+                        <td class="px-6 py-5 text-center">
+                            <a href="https://api.whatsapp.com/send?phone=6285645157395&text=Halo%20Admin%20Game%20Edukasi,%20saya%20tertarik%20untuk%20layanan%20Ubah%20Suai%20/%20Custom%20Soal" target="_blank" class="inline-block bg-indigo-600/20 hover:bg-indigo-600 text-indigo-400 font-semibold px-3 py-1.5 rounded-md text-xs border border-indigo-500/30 transition-colors whitespace-nowrap">Hubungi Admin</a>
+                        </td>
+                    </tr>
+                    <tr class="hover:bg-slate-900/50 transition-colors">
+                        <td class="px-6 py-5 font-semibold text-emerald-400">2</td>
+                        <td class="px-6 py-5 font-bold text-white text-base">Melayani Pelatihan Pembuatan Game Edukasi</td>
+                        <td class="px-6 py-5 text-slate-400 leading-relaxed">Kami melayani program pelatihan, workshop, atau bimbingan teknis intensif bagi guru untuk belajar memproduksi software game edukasi interaktif mandiri dari dasar.</td>
+                        <td class="px-6 py-5 text-center">
+                            <a href="https://api.whatsapp.com/send?phone=6285645157395&text=Halo%20Admin%20Game%20Edukasi,%20saya%20tertarik%20untuk%20layanan%20Pelatihan%20Pembuatan%20Game%20Edukasi" target="_blank" class="inline-block bg-emerald-600/20 hover:bg-emerald-600 text-emerald-400 font-semibold px-3 py-1.5 rounded-md text-xs border border-emerald-500/30 transition-colors whitespace-nowrap">Daftar Pelatihan</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- CARA PEMBELIAN & INFORMASI BANK -->
+    <section class="max-w-4xl mx-auto px-4 pb-6">
+        <div class="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-800 rounded-2xl p-6 md:p-8 shadow-xl">
+            <h2 class="text-xl font-bold mb-6 flex items-center gap-2 text-indigo-400">
+                <span class="flex h-3 w-3 relative">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-3 w-3 bg-indigo-500"></span>
+                </span>
+                Informasi Pembayaran & Prosedur Game Edukasi
+            </h2>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Detail Rekening -->
+                <div class="bg-slate-950/60 p-5 rounded-xl border border-slate-800">
+                    <p class="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-2">Transfer Bank Resmi</p>
+                    <div class="text-lg font-bold text-white mb-1">Bank BCA</div>
+                    <div class="text-2xl font-mono text-indigo-400 my-2 font-bold tracking-wide">2251161421</div>
+                    <p class="text-sm text-slate-300 font-medium">Atas Nama: <span class="text-white font-semibold">Aguk Rudianto</span></p>
+                </div>
+
+                <!-- Catatan Pengiriman -->
+                <div class="space-y-3 text-sm text-slate-300">
+                    <div class="flex items-start gap-3">
+                        <span class="bg-indigo-500/10 text-indigo-400 px-2 py-0.5 rounded text-xs font-bold mt-0.5">1</span>
+                        <p>Pilih produk game pilihan Anda di bawah ini dan klik tombol <strong class="text-white">Beli Sekarang</strong>.</p>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <span class="bg-indigo-500/10 text-indigo-400 px-2 py-0.5 rounded text-xs font-bold mt-0.5">2</span>
+                        <p>Lakukan transfer sesuai harga produk ke rekening BCA resmi Game Edukasi di samping.</p>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <span class="bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded text-xs font-bold mt-0.5">3</span>
+                        <p>Setelah pembayaran berhasil, silakan langsung <strong class="text-emerald-400">konfirmasi ke nomor WhatsApp 085645157395</strong>.</p>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <span class="bg-amber-500/10 text-amber-400 px-2 py-0.5 rounded text-xs font-bold mt-0.5">!</span>
+                        <p class="text-slate-400">Produk Anda akan dikirim langsung ke <strong class="text-white">alamat email aktif</strong> konsumen. Pastikan alamat email tersebut aktif dan tidak salah tulis!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TABEL INFORMASI HUBUNGI ADMIN (TERBARU) -->
+    <section class="max-w-4xl mx-auto px-4 pb-24">
+        <div class="overflow-hidden border border-slate-800 rounded-xl shadow-xl">
+            <table class="w-full border-collapse text-left text-sm text-slate-300">
+                <tbody class="bg-slate-900/40">
+                    <tr>
+                        <td class="px-6 py-5 text-slate-300 leading-relaxed font-medium">
+                            Untuk informasi lebih lanjut silahkan hubungi nomor WhatsApp 
+                            <a href="https://api.whatsapp.com/send?phone=6285645157395" target="_blank" class="text-emerald-400 font-bold hover:underline">085645157395</a> 
+                            atau via email ke: 
+                            <a href="mailto:guru.kayaraya.id@gmail.com" class="text-indigo-400 font-bold hover:underline">guru.kayaraya.id@gmail.com</a>
+                        </td>
+                        <td class="px-6 py-5 text-center whitespace-nowrap w-2/12">
+                            <div class="flex gap-2 justify-center">
+                                <a href="https://api.whatsapp.com/send?phone=6285645157395" target="_blank" class="bg-emerald-600/20 hover:bg-emerald-600 text-emerald-400 font-semibold px-3 py-1.5 rounded-md text-xs border border-emerald-500/30 transition-colors">Chat WA</a>
+                                <a href="mailto:guru.kayaraya.id@gmail.com" class="bg-indigo-600/20 hover:bg-indigo-600 text-indigo-400 font-semibold px-3 py-1.5 rounded-md text-xs border border-indigo-500/30 transition-colors">Kirim Email</a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-950 border-t border-slate-900 text-slate-500 text-xs text-center py-6 mt-auto">
+        <p>&copy; 2026 Game Edukasi Store. All Rights Reserved.</p>
+    </footer>
+
+    <!-- MODAL POPUP FORM PEMBELIAN -->
+    <div id="modalBeli" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 hidden transition-opacity">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
+            <div class="bg-slate-950 p-4 border-b border-slate-800 flex justify-between items-center">
+                <h3 class="font-bold text-white">Formulir Pesanan Game Edukasi</h3>
+                <button onclick="tutupModal()" class="text-slate-400 hover:text-white text-xl font-bold cursor-pointer px-2">&times;</button>
+            </div>
+            <form id="formCheckout" onsubmit="prosesCheckout(event)" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Produk Terpilih</label>
+                    <input type="text" id="modalNamaProduk" readonly class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-300 text-sm font-semibold focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Total Transfer</label>
+                    <input type="text" id="modalHargaProduk" readonly class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-indigo-400 font-mono text-base font-bold focus:outline-none">
+                </div>
+                <div class="bg-indigo-950/30 border border-indigo-900/50 p-3 rounded-lg text-xs text-indigo-300 space-y-1">
+                    <p class="font-bold text-indigo-200">Informasi Pembayaran:</p>
+                    <p>Transfer BCA: <strong>2251161421</strong> (a.n Aguk Rudianto)</p>
+                </div>
+                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-lg transition-colors cursor-pointer text-center text-sm shadow-lg shadow-emerald-900/20">Lanjut ke WhatsApp</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        const modal = document.getElementById('modalBeli');
+        const namaProdukInput = document.getElementById('modalNamaProduk');
+        const hargaProdukInput = document.getElementById('modalHargaProduk');
+        const dropdownHubungi = document.getElementById('dropdownHubungi');
+
+        /* fungsi toggle, tutup, bukaModal dll tetap sama */
+        function toggleDropdownHubungi(event) {
+            event.stopPropagation();
+            if(dropdownHubungi.classList.contains('hidden')) {
+                dropdownHubungi.classList.remove('hidden');
+                setTimeout(() => {
+                    dropdownHubungi.classList.remove('opacity-0', 'scale-95');
+                    dropdownHubungi.classList.add('opacity-100', 'scale-100');
+                }, 10);
+            } else {
+                tutupDropdownHubungi();
+            }
+        }
+
+        function tutupDropdownHubungi() {
+            dropdownHubungi.classList.remove('opacity-100', 'scale-100');
+            dropdownHubungi.classList.add('opacity-0', 'scale-95');
+            setTimeout(() => {
+                dropdownHubungi.classList.add('hidden');
+            }, 100);
+        }
+
+        window.addEventListener('click', function() {
+            tutupDropdownHubungi();
+        });
+
+        function bukaModal(namaProduk, harga) {
+            namaProdukInput.value = namaProduk;
+            hargaProdukInput.value = "Rp " + harga.toLocaleString('id-ID');
+            modal.classList.remove('hidden');
+        }
+
+        function tutupModal() {
+            modal.classList.add('hidden');
+            document.getElementById('formCheckout').reset();
+        }
+
+        function prosesCheckout(event) {
+            event.preventDefault(); 
+            const noWa = "6285645157395"; 
+            const pesan = `Halo Admin Game Edukasi,\n\nSaya ingin mengonfirmasi pembayaran produk:\n\n` +
+                          `• Produk: ${namaProdukInput.value}\n` +
+                          `• Total Bayar: ${hargaProdukInput.value}\n\n` +
+                          `Saya telah mentransfer ke rekening BCA atas nama Aguk Rudianto. Berikut lampiran bukti transfer saya. Setelah dikonfirmasi berhasil, mohon kirimkan file produknya.`;
+
+            const urlWa = `https://api.whatsapp.com/send?phone=${noWa}&text=${encodeURIComponent(pesan)}`;
+            alert("Pembayaran Berhasil / Sedang Diproses.\n\nSistem akan mengarahkan Anda ke WhatsApp admin untuk mengirimkan BUKTI TRANSFER.");
+            window.open(urlWa, '_blank');
+            tutupModal();
+        }
+
+        window.addEventListener('click', function(event) {
+            if (event.target == modal) {
+                tutupModal();
+            }
+        });
+    </script>
+</body>
+</html>

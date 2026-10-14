@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Spin Wheel Ala Wordwall</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f5f7fb;
+            min-height: 100vh;
+            padding: 20px;
+            transition: background-color 0.3s;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .container {
+            position: relative; /* Ditambahkan agar modal bisa menutupi container saat fullscreen */
+            display: flex;
+            flex-direction: row;
+            gap: 40px;
+            max-width: 900px;
+            width: 100%;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- PENGATURAN UTAMA SAAT LAYAR PENUH (FULLSCREEN) --- */
+        .container:fullscreen {
+            max-width: 100vw;
+            width: 100vw;
+            height: 100vh;
+            border-radius: 0;
+            background: #f5f7fb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+
+        /* Sembunyikan Input Teks Nama saat Layar Penuh */
+        .container:fullscreen .control-box {
+            display: none !important;
+        }
+
+        /* Pastikan Area Roda Berada di Tengah Sempurna */
+        .container:fullscreen .wheel-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+        }
+
+        /* Bagian Roda */
+        .wheel-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .wheel-box {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .pointer {
+            position: absolute;
+            left: -25px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-top: 20px solid transparent;
+            border-bottom: 20px solid transparent;
+            border-left: 30px solid #444;
+            z-index: 10;
+        }
+
+        canvas {
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            transition: transform 4s cubic-bezier(0.1, 0.8, 0.1, 1);
+        }
+
+        /* Bagian Kontrol & Input */
+        .control-box {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+        }
+
+        textarea {
+            width: 100%;
+            height: 180px;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            resize: none;
+            font-size: 14px;
+        }
+
+        textarea:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        button {
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .btn-spin { background-color: #007bff; color: white; }
+        .btn-spin:hover { background-color: #0056b3; }
+
+        .btn-fullscreen { 
+            background-color: #28a745; 
+            color: white; 
+            padding: 8px 16px; 
+            font-size: 14px;
+        }
+        .btn-fullscreen:hover { background-color: #218838; }
+
+        /* Pop-up Pemenang / Hasil (Sekarang menggunakan fixed/absolute yang kompatibel dengan Fullscreen) */
+        .modal {
+            display: none;
+            position: absolute; /* Menggunakan absolute agar mengunci di dalam container saat fullscreen */
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 9999; /* Memastikan berada di lapisan paling atas */
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.5);
+            max-width: 500px;
+            width: 90%;
+            animation: popIn 0.3s ease-out;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.7); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-content h2 {
+            font-size: 2.5rem;
+            color: #ffc107;
+            background: #111;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            margin-bottom: 25px;
+            word-wrap: break-word;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .btn-resume { background-color: #6c757d; color: white; flex: 1; }
+        .btn-resume:hover { background-color: #5a6268; }
+
+        .btn-eliminate { background-color: #dc3545; color: white; flex: 1; }
+        .btn-eliminate:hover { background-color: #bd2130; }
+    </style>
+</head>
+<body>
+
+    <h1 id="mainTitle">Roda Acak Berputar</h1>
+
+    <div class="container" id="mainContainer">
+        <div class="wheel-area">
+            <div class="wheel-box" onclick="spinWheel()" style="cursor: pointer;" title="Klik roda untuk memutar">
+                <div class="pointer"></div>
+                <canvas id="wheel" width="450" height="450"></canvas>
+            </div>
+            <button id="fsBtn" class="btn-fullscreen" onclick="toggleFullscreen()">🖵 LAYAR PENUH</button>
+        </div>
+
+        <div class="control-box" id="controlBox">
+            <label for="namesInput"><strong>Masukkan Daftar Nama (1 nama per baris):</strong></label>
+            <textarea id="namesInput">DAFIN
+FIRA
+SILA
+NAURA
+ZAHRA
+EL
+FELI
+GIBRAN
+KANIA
+FADIL
+NATHAN
+NOVAL
+RAKA
+FATKHUL
+NAFIS
+NISA
+GANESHA
+NABILA
+VINA
+BAIM
+ARUM
+DANI
+            </textarea>
+            <button class="btn-spin" onclick="spinWheel()">PUTAR RODA</button>
+        </div>
+
+        <div id="resultModal" class="modal">
+            <div class="modal-content">
+                <p style="color: #444; font-size: 16px; font-weight: bold;">🎉 TERPILIH 🎉</p>
+                <h2 id="winnerName">NAMA</h2>
+                <div class="modal-buttons">
+                    <button class="btn-resume" onclick="closeModal()">Resume</button>
+                    <button class="btn-eliminate" onclick="eliminateWinner()">Eliminate</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById("wheel");
+        const ctx = canvas.getContext("2d");
+        const namesInput = document.getElementById("namesInput");
+        const modal = document.getElementById("resultModal");
+        const winnerNameText = document.getElementById("winnerName");
+        const mainContainer = document.getElementById("mainContainer");
+        const fsBtn = document.getElementById("fsBtn");
+
+        let names = [];
+        let colors = [];
+        let currentRotation = 0;
+        let isSpinning = false;
+        let selectedIndex = null;
+
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playTickSound() {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.05);
+        }
+
+        function playWinSound() {
+            const notes = [261.63, 329.63, 392.00, 523.25];
+            notes.forEach((freq, index) => {
+                setTimeout(() => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.4);
+                }, index * 100);
+            });
+        }
+
+        const colorPalette = ["#3366cc", "#109618", "#ff9900", "#dc3912", "#990099", "#0099c6", "#dd4477", "#66aa00", "#b82e2e", "#316395"];
+
+        function initColors(num) {
+            colors = [];
+            for (let i = 0; i < num; i++) {
+                colors.push(colorPalette[i % colorPalette.length]);
+            }
+        }
+
+        function drawWheel() {
+            const numSegments = names.length;
+            if (numSegments === 0) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                return;
+            }
+
+            const arcSize = (2 * Math.PI) / numSegments;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = canvas.width / 2 - 10;
+
+            for (let i = 0; i < numSegments; i++) {
+                const angle = i * arcSize;
+                ctx.beginPath();
+                ctx.fillStyle = colors[i];
+                ctx.moveTo(centerX, centerY);
+                ctx.arc(centerX, centerY, radius, angle, angle + arcSize);
+                ctx.lineTo(centerX, centerY);
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.save();
+                ctx.translate(centerX, centerY);
+                ctx.rotate(angle + arcSize / 2);
+                ctx.fillStyle = "white";
+                ctx.font = "bold 14px Arial";
+                ctx.textAlign = "right";
+                ctx.fillText(names[i], radius - 20, 5);
+                ctx.restore();
+            }
+
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 30, 0, 2 * Math.PI);
+            ctx.fillStyle = "white";
+            ctx.fill();
+            ctx.stroke();
+        }
+
+        function updateWheelData() {
+            const lines = namesInput.value.split('\n').map(line => line.trim()).filter(line => line !== "");
+            names = lines;
+            initColors(names.length);
+            drawWheel();
+        }
+
+        function spinWheel() {
+            if (isSpinning || names.length === 0) return;
+            isSpinning = true;
+
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            const numSegments = names.length;
+            const extraDegrees = Math.floor(Math.random() * 360);
+            const totalSpin = 1800 + extraDegrees; 
+            currentRotation += totalSpin;
+
+            canvas.style.transform = `rotate(${currentRotation}deg)`;
+
+            let duration = 4000;
+            let startTime = performance.now();
+            let arcSizeDeg = 360 / numSegments;
+            let lastSegmentIndex = -1;
+
+            function checkTick(now) {
+                let elapsed = now - startTime;
+                if (elapsed < duration) {
+                    let progress = elapsed / duration;
+                    let easeOutProgress = 1 - Math.pow(1 - progress, 3);
+                    let currentAngle = (currentRotation - totalSpin) + (totalSpin * easeOutProgress);
+                    let relativeAngle = (currentAngle) % 360;
+                    let currentSegment = Math.floor(((180 - relativeAngle + 360) % 360) / arcSizeDeg);
+
+                    if (currentSegment !== lastSegmentIndex) {
+                        playTickSound();
+                        lastSegmentIndex = currentSegment;
+                    }
+                    requestAnimationFrame(checkTick);
+                }
+            }
+            requestAnimationFrame(checkTick);
+
+            setTimeout(() => {
+                isSpinning = false;
+                const actualDegrees = (currentRotation) % 360;
+                const arcSizeDeg = 360 / numSegments;
+                let targetIndex = Math.floor((180 - actualDegrees + 360) % 360 / arcSizeDeg);
+                if(targetIndex < 0) targetIndex += numSegments;
+
+                selectedIndex = targetIndex;
+                playWinSound();
+                winnerNameText.innerText = names[selectedIndex];
+                modal.style.display = "flex";
+            }, duration);
+        }
+
+        function closeModal() {
+            modal.style.display = "none";
+        }
+
+        function eliminateWinner() {
+            if (selectedIndex !== null) {
+                names.splice(selectedIndex, 1);
+                namesInput.value = names.join("\n");
+                updateWheelData();
+                selectedIndex = null;
+            }
+            modal.style.display = "none";
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                if (mainContainer.requestFullscreen) {
+                    mainContainer.requestFullscreen();
+                } else if (mainContainer.webkitRequestFullscreen) {
+                    mainContainer.webkitRequestFullscreen();
+                } else if (mainContainer.msRequestFullscreen) {
+                    mainContainer.msRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        document.addEventListener('fullscreenchange', () => {
+            if (document.fullscreenElement) {
+                fsBtn.innerText = "✖ KELUAR LAYAR PENUH";
+            } else {
+                fsBtn.innerText = "🖵 LAYAR PENUH";
+            }
+        });
+
+        namesInput.addEventListener("input", updateWheelData);
+        updateWheelData();
+    </script>
+</body>
+</html>

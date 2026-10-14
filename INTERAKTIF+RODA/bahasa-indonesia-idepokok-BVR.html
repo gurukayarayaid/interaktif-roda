@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Bahasa Indonesia Kelas 3 SD - Ide Pokok dan Ide Pendukung</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fb;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #main-app-container {
+            background: white;
+            width: 100%;
+            max-width: 1100px;
+            height: 90vh;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        :fullscreen body {
+            overflow: hidden !important;
+        }
+        :-webkit-full-screen body {
+            overflow: hidden !important;
+        }
+
+        :fullscreen #main-app-container {
+            max-width: 100vw !important;
+            width: 100vw !important;
+            max-height: 100vh !important;
+            height: 100vh !important;
+            border-radius: 0 !important;
+            padding: 40px 100px !important;
+            box-shadow: none !important;
+            overflow: hidden !important;
+        }
+        :-webkit-full-screen #main-app-container {
+            max-width: 100vw !important;
+            width: 100vw !important;
+            max-height: 100vh !important;
+            height: 100vh !important;
+            border-radius: 0 !important;
+            padding: 20px 40px !important;
+            box-shadow: none !important;
+            overflow: hidden !important;
+        }
+
+        /* TOMBOL FULLSCREEN PINDAH KE KANAN BAWAH */
+        .btn-fullscreen {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            background-color: #212529;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: bold;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: background 0.2s;
+        }
+        .btn-fullscreen:hover {
+            background-color: #495057;
+        }
+
+        .hidden { display: none !important; }
+
+        /* ================= STYLE HALAMAN RODA ACAK ================= */
+        .wheel-page {
+            display: flex;
+            flex-direction: row;
+            gap: 40px;
+            width: 100%;
+            height: 100%;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wheel-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wheel-box {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .pointer {
+            position: absolute;
+            left: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+            border-left: 25px solid #444;
+            z-index: 10;
+        }
+
+        canvas {
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            max-width: 85vh;
+            max-height: 85vh;
+            width: 420px;
+            height: 420px;
+            transition: transform 4s cubic-bezier(0.1, 0.8, 0.1, 1);
+        }
+
+        :fullscreen canvas {
+            width: 70vh;
+            height: 70vh;
+        }
+
+        .control-box {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            max-width: 450px;
+            height: 100%;
+            justify-content: center;
+        }
+
+        textarea {
+            width: 100%;
+            height: 55vh;
+            max-height: 300px;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            resize: none;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .modal {
+            display: none;
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.5);
+            max-width: 550px;
+            width: 90%;
+            animation: popIn 0.3s ease-out;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.7); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-content h2 {
+            font-size: 2.5rem;
+            color: #ffc107;
+            background: #111;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            word-wrap: break-word;
+        }
+
+        /* ================= STYLE HALAMAN GAME ================= */
+        .game-page {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            user-select: none;
+        }
+
+        .top-border {
+            display: flex;
+            gap: 8px;
+            width: 100%;
+            justify-content: center;
+            margin: 5px 0;
+        }
+        
+        .dash {
+            width: 35px;
+            height: 10px;
+            background-color: #ccc;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+
+        #status-bar {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            color: #333;
+            font-size: 1.8rem;
+            border-bottom: 2px dashed #ccc;
+            padding-bottom: 8px;
+            margin-bottom: 5px;
+        }
+
+        .provinsi-container {
+            width: 100%;
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding: 10px;
+            min-height: 120px;
+        }
+
+        #target-soal {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+            text-align: center;
+            position: absolute;
+            width: 100%;
+            opacity: 0;
+            transform: translateX(-100%);
+            line-height: 1.4;
+            padding: 0 10px;
+        }
+
+        :fullscreen #target-soal {
+            font-size: 2rem;
+        }
+
+        .slide-in { animation: slideInAnim 0.4s forwards cubic-bezier(0.175, 0.885, 0.32, 1.15); }
+        @keyframes slideInAnim { 0% { transform: translateX(-100%); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
+        .slide-out { animation: slideOutAnim 0.4s forwards ease-in; }
+        @keyframes slideOutAnim { 0% { transform: translateX(0); opacity: 1; } 100% { transform: translateX(100%); opacity: 0; } }
+
+        #feedback {
+            font-size: 7rem;
+            font-weight: bold;
+            position: absolute;
+            top: 20%;
+            z-index: 10;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.2s ease;
+            pointer-events: none;
+        }
+        .correct-feedback { color: #4CAF50; opacity: 1 !important; transform: scale(1.2) !important; }
+        .wrong-feedback { color: #F44336; opacity: 1 !important; transform: scale(1.2) !important; }
+
+        #grid-jawaban {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            width: 100%;
+            max-width: 95%;
+            margin-bottom: 10px;
+        }
+
+        .btn-jawaban {
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.3rem;
+            font-weight: bold;
+            padding: 15px 20px;
+            cursor: pointer;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+            transition: transform 0.1s, opacity 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 90px;
+            line-height: 1.3;
+        }
+        :fullscreen .btn-jawaban {
+            min-height: 130px;
+            font-size: 1.6rem;
+        }
+        .btn-jawaban:active { transform: scale(0.97); }
+        .shake { animation: shake 0.3s ease-in-out; }
+        @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-8px); } 50% { transform: translateX(6px); } 75% { transform: translateX(-4px); } 100% { transform: translateX(0); } }
+
+        /* ================= STYLE SCREEN LEADERBOARD ================= */
+        .screen {
+            width: 100%;
+            max-width: 750px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .screen h1 { font-size: 2.8rem; margin-bottom: 5px; }
+        .screen p { font-size: 1.4rem; margin-bottom: 5px; }
+
+        .leaderboard-container {
+            width: 100%;
+            height: 35vh;
+            max-height: 220px;
+            overflow-y: auto;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            background: #fafafa;
+        }
+        .leaderboard-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        .leaderboard-container::-webkit-scrollbar-thumb {
+            background-color: #ccc;
+            border-radius: 4px;
+        }
+
+        :fullscreen .leaderboard-container {
+            max-height: 38vh;
+        }
+
+        .table-leaderboard {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1.3rem;
+        }
+
+        .table-leaderboard th, .table-leaderboard td {
+            padding: 10px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .table-leaderboard th {
+            background-color: #ff922b;
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+
+        .table-leaderboard tr:nth-child(even) { background-color: #f2f2f2; }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            width: 100%;
+            margin-top: 5px;
+        }
+
+        button.btn-general {
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        :fullscreen button.btn-general {
+            padding: 15px 25px;
+            font-size: 1.4rem;
+        }
+        button.btn-general:active { transform: scale(0.98); }
+
+        .btn-spin { background-color: #007bff; color: white; padding: 15px 30px; font-size: 1.5rem; }
+        .btn-spin:hover { background-color: #0056b3; }
+        
+        .btn-eliminate-go { background-color: #d32f2f; color: white; }
+        .btn-eliminate-go:hover { background-color: #b71c1c; }
+
+        .btn-keep-go { background-color: #2e7d32; color: white; }
+        .btn-keep-go:hover { background-color: #1b5e20; }
+
+        .btn-print { background-color: #17a2b8; color: white; }
+        .btn-print:hover { background-color: #138496; }
+
+        .btn-save-data { background-color: #ff922b; color: white; }
+        .btn-save-data:hover { background-color: #f57c00; }
+
+        .btn-reset-data {
+            background-color: #6c757d;
+            color: white;
+            grid-column: span 2;
+        }
+        .btn-reset-data:hover { background-color: #5a6268; }
+
+        @media print {
+            body * { visibility: hidden; }
+            .printable-area, .printable-area * { visibility: visible; }
+            .printable-area { position: absolute; left: 0; top: 0; width: 100%; }
+            .leaderboard-container { max-height: none !important; overflow: visible !important; }
+            .button-group, h1:not(.print-title), .btn-fullscreen { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="btn-fullscreen" onclick="toggleFullscreen()">
+        🖥️ <span id="fullscreen-text"></span>
+    </button>
+
+    <div id="main-app-container">
+        
+        <!-- HALAMAN 1: RODA ACAK BERPUTAR -->
+        <div id="page-wheel" class="wheel-page">
+            <div class="wheel-area">
+                <div class="wheel-box" onclick="spinWheel()" style="cursor: pointer;" title="Klik roda untuk memutar">
+                    <div class="pointer"></div>
+                    <canvas id="wheel" width="420" height="420"></canvas>
+                </div>
+            </div>
+
+            <div class="control-box">
+                <label for="namesInput" style="font-size: 1.2rem; font-weight: bold; color: #333;">Masukkan Daftar Nama (1 nama per baris):</label>
+                <textarea id="namesInput">DAFIN
+FIRA
+SILA
+NAURA
+ZAHRA
+EL
+FELI
+GIBRAN
+KANIA
+FADIL
+NATHAN
+NOVAL
+RAKA
+FATKHUL
+NAFIS
+NISA
+GANESHA
+NABILA
+VINA
+BAIM
+ARUM
+DANI</textarea>
+                <button class="btn-general btn-spin" onclick="spinWheel()">PUTAR RODA</button>
+            </div>
+
+            <div id="resultModal" class="modal">
+                <div class="modal-content">
+                    <p style="color: #444; font-size: 1.8rem; font-weight: bold;">🎉 MURID TERPILIH 🎉</p>
+                    <h2 id="winnerName">NAMA</h2>
+                    <button class="btn-general btn-spin" style="width:100%; font-size:1.8rem; padding: 15px;" onclick="mulaiKuisBahasaIndonesia()">MULAI GAME IDE POKOK & PENDUKUNG</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- HALAMAN 2: GAME IDE POKOK DAN PENDUKUNG -->
+        <div id="page-game" class="game-page hidden">
+            <div id="status-bar">
+                <div id="info-nama-game">Siswa: -</div>
+                <div id="info-nyawa">❤️ Nyawa: 3</div>
+                <div id="info-skor">Skor: 0</div>
+            </div>
+
+            <div class="top-border">
+                <div class="dash"></div><div class="dash"></div><div class="dash"></div>
+                <div class="dash"></div><div class="dash"></div><div class="dash"></div>
+                <div class="dash"></div><div class="dash"></div><div class="dash"></div>
+                <div class="dash"></div><div class="dash"></div><div class="dash"></div>
+            </div>
+
+            <div id="feedback"></div>
+
+            <div class="provinsi-container">
+                <div id="target-soal">Memuat Soal...</div>
+            </div>
+
+            <div class="top-border">
+                <div class="dash"></div><div class="dash"></div><div class="dash"></div>
+                <div class="dash"></div><div class="dash"></div><div class="dash"></div>
+                <div class="dash"></div><div class="dash"></div><div class="dash"></div>
+                <div class="dash"></div><div class="dash"></div><div class="dash"></div>
+            </div>
+
+            <div id="grid-jawaban"></div>
+        </div>
+
+        <!-- HALAMAN 3: SCREEN GAME OVER -->
+        <div id="page-game-over" class="screen printable-area hidden">
+            <h1 class="print-title" style="color: #d32f2f;">Game Over</h1>
+            <p style="font-weight: bold; font-size: 2rem; color: #d32f2f;" id="skor-akhir-kalah"></p>
+            
+            <h3 style="margin-top: 5px; font-size: 1.4rem; color: #333;">🏆 DAFTAR NILAI "IDE POKOK & PENDUKUNG" 🏆</h3>
+            <div class="leaderboard-container">
+                <table class="table-leaderboard" id="tabel-leaderboard-kalah">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Nama Murid</th>
+                            <th>Skor</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            
+            <div class="button-group">
+                <button class="btn-general btn-eliminate-go" onclick="kembaliKeRoda(true)">🔄 Roda (Hapus Nama)</button>
+                <button class="btn-general btn-keep-go" onclick="kembaliKeRoda(false)">↩️ Roda (Simpan Nama)</button>
+                <button class="btn-general btn-print" onclick="cetakHalaman()">🖨️ Cetak</button>
+                <button class="btn-general btn-save-data" onclick="simpanKeFileTeks()">💾 Simpan (.txt)</button>
+                <button class="btn-general btn-reset-data" onclick="resetLeaderboardData()">⚠️ Kosongkan Riwayat</button>
+            </div>
+        </div>
+
+        <!-- HALAMAN 4: SCREEN WIN -->
+        <div id="page-win" class="screen printable-area hidden">
+            <h1 class="print-title" style="color: #2e7d32;">Kamu Hebat! 🎉</h1>
+            <p>Semua soal berhasil diselesaikan!</p>
+            <p style="font-weight: bold; font-size: 2rem; color: #2e7d32;" id="skor-akhir-menang">Skor Kamu: 100</p>
+            
+            <h3 style="margin-top: 5px; font-size: 1.4rem; color: #333;">🏆 DAFTAR NILAI "IDE POKOK & PENDUKUNG" 🏆</h3>
+            <div class="leaderboard-container">
+                <table class="table-leaderboard" id="tabel-leaderboard-menang">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Nama Murid</th>
+                            <th>Skor</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            
+            <div class="button-group">
+                <button class="btn-general btn-eliminate-go" onclick="kembaliKeRoda(true)">🔄 Roda (Hapus Nama)</button>
+                <button class="btn-general btn-keep-go" onclick="kembaliKeRoda(false)">↩️ Roda (Simpan Nama)</button>
+                <button class="btn-general btn-print" onclick="cetakHalaman()">🖨️ Cetak</button>
+                <button class="btn-general btn-save-data" onclick="simpanKeFileTeks()">💾 Simpan (.txt)</button>
+                <button class="btn-general btn-reset-data" onclick="resetLeaderboardData()">⚠️ Kosongkan Riwayat</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        let namaSiswa = "";
+        let riwayatJawabanSesiIni = []; 
+
+        function playTickSound() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.05);
+        }
+
+        function playWinSound() {
+            const notes = [261.63, 329.63, 392.00, 523.25];
+            notes.forEach((freq, index) => {
+                setTimeout(() => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.4);
+                }, index * 100);
+            });
+        }
+
+        function mainkanSuaraGame(tipe) {
+            try {
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                let osc = audioCtx.createOscillator();
+                let gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                if (tipe === 'benar') {
+                    osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); 
+                    osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1); 
+                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.25);
+                } else if (tipe === 'salah') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+                    osc.frequency.linearRampToValueAtTime(80, audioCtx.currentTime + 0.2);
+                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.2);
+                }
+            } catch (e) {}
+        }
+
+        // ================= LOGIK RODA ACAK =================
+        const canvas = document.getElementById("wheel");
+        const ctx = canvas.getContext("2d");
+        const namesInput = document.getElementById("namesInput");
+        const modal = document.getElementById("resultModal");
+        const winnerNameText = document.getElementById("winnerName");
+
+        let names = [];
+        let colors = [];
+        let currentRotation = 0;
+        let isSpinning = false;
+        let selectedIndex = null;
+        const colorPalette = ["#3366cc", "#109618", "#ff9900", "#dc3912", "#990099", "#0099c6", "#dd4477", "#66aa00", "#b82e2e", "#316395"];
+
+        function initColors(num) {
+            colors = [];
+            for (let i = 0; i < num; i++) { colors.push(colorPalette[i % colorPalette.length]); }
+        }
+
+        function drawWheel() {
+            const numSegments = names.length;
+            if (numSegments === 0) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                return;
+            }
+            const arcSize = (2 * Math.PI) / numSegments;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = canvas.width / 2 - 10;
+
+            for (let i = 0; i < numSegments; i++) {
+                const angle = i * arcSize;
+                ctx.beginPath();
+                ctx.fillStyle = colors[i];
+                ctx.moveTo(centerX, centerY);
+                ctx.arc(centerX, centerY, radius, angle, angle + arcSize);
+                ctx.lineTo(centerX, centerY);
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.save();
+                ctx.translate(centerX, centerY);
+                ctx.rotate(angle + arcSize / 2);
+                ctx.fillStyle = "white";
+                ctx.font = "bold 13px Arial";
+                ctx.textAlign = "right";
+                ctx.fillText(names[i].substring(0, 16), radius - 20, 5);
+                ctx.restore();
+            }
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 25, 0, 2 * Math.PI);
+            ctx.fillStyle = "white"; ctx.fill(); ctx.stroke();
+        }
+
+        function updateWheelData() {
+            names = namesInput.value.split('\n').map(line => line.trim()).filter(line => line !== "");
+            initColors(names.length);
+            drawWheel();
+        }
+
+        function spinWheel() {
+            if (isSpinning || names.length === 0) return;
+            isSpinning = true;
+            modal.style.display = "none";
+
+            const numSegments = names.length;
+            const extraDegrees = Math.floor(Math.random() * 360);
+            const totalSpin = 1800 + extraDegrees; 
+            currentRotation += totalSpin;
+            canvas.style.transform = `rotate(${currentRotation}deg)`;
+
+            let duration = 4000;
+            let startTime = performance.now();
+            let arcSizeDeg = 360 / numSegments;
+            let lastSegmentIndex = -1;
+
+            function checkTick(now) {
+                let elapsed = now - startTime;
+                if (elapsed < duration) {
+                    let progress = elapsed / duration;
+                    let easeOutProgress = 1 - Math.pow(1 - progress, 3);
+                    let currentAngle = (currentRotation - totalSpin) + (totalSpin * easeOutProgress);
+                    let relativeAngle = (currentAngle) % 360;
+                    let currentSegment = Math.floor(((180 - relativeAngle + 360) % 360) / arcSizeDeg);
+
+                    if (currentSegment !== lastSegmentIndex) {
+                        playTickSound();
+                        lastSegmentIndex = currentSegment;
+                    }
+                    requestAnimationFrame(checkTick);
+                }
+            }
+            requestAnimationFrame(checkTick);
+
+            setTimeout(() => {
+                isSpinning = false;
+                const actualDegrees = (currentRotation) % 360;
+                let targetIndex = Math.floor((180 - actualDegrees + 360) % 360 / arcSizeDeg);
+                if(targetIndex < 0) targetIndex += numSegments;
+
+                selectedIndex = targetIndex;
+                namaSiswa = names[selectedIndex];
+                playWinSound();
+                winnerNameText.innerText = namaSiswa;
+                modal.style.display = "flex";
+            }, duration);
+        }
+
+        // ================= DATABASE SOAL BAHASA INDONESIA KELAS 3 SD =================
+        const databaseSoal = [
+            { 
+                soal: "Inti atau masalah utama yang dibahas dalam sebuah paragraf disebut ...", 
+                pilihan: ["Ide pokok", "Ide pendukung", "Judul cerita", "Kalimat penjelas"], 
+                jawabanBenar: "Ide pokok" 
+            },
+            { 
+                soal: "Gagasan yang berfungsi menjelaskan atau memberi informasi tambahan bagi ide pokok disebut ...", 
+                pilihan: ["Ide pendukung", "Ide pokok", "Kata kunci", "Kesimpulan"], 
+                jawabanBenar: "Ide pendukung" 
+            },
+            { 
+                soal: "<i>'Kucing adalah hewan peliharaan yang populer. Mereka memiliki bulu yang halus dan tingkah yang lucu. Selain itu, kucing juga suka bermain bola benang.'</i><br><br>Ide pokok dari paragraf di atas adalah ...", 
+                pilihan: ["Kucing hewan peliharaan populer", "Kucing suka bola benang", "Bulu kucing sangat halus", "Kucing suka tidur siang"], 
+                jawabanBenar: "Kucing hewan peliharaan populer" 
+            },
+            { 
+                soal: "<i>'Kucing adalah hewan peliharaan yang populer. Mereka memiliki bulu yang halus dan tingkah yang lucu. Selain itu, kucing juga suka bermain bola benang.'</i><br><br>Manakah yang termasuk ide pendukung dari paragraf di atas?", 
+                pilihan: ["Kucing memiliki bulu yang halus", "Kucing adalah hewan populer", "Kucing adalah hewan buas", "Semua orang memelihara kucing"], 
+                jawabanBenar: "Kucing memiliki bulu yang halus" 
+            },
+            { 
+                soal: "Di manakah biasanya kita dapat menemukan ide pokok dalam sebuah paragraf?", 
+                pilihan: ["Awal atau akhir paragraf", "Hanya di judul teks", "Di luar teks cerita", "Hanya di baris kedua"], 
+                jawabanBenar: "Awal atau akhir paragraf" 
+            },
+            { 
+                soal: "Nama lain dari ide pokok adalah ...", 
+                pilihan: ["Gagasan utama", "Gagasan penjelas", "Kalimat tambahan", "Kata sapaan"], 
+                jawabanBenar: "Gagasan utama" 
+            },
+            { 
+                soal: "<i>'Setiap hari, Roni selalu merawat tanamannya. Ia menyiramnya setiap pagi dan sore hari. Roni juga memberi pupuk seminggu sekali agar tanaman tumbuh subur.'</i><br><br>Ide pokok paragraf di atas adalah ...", 
+                pilihan: ["Roni selalu merawat tanamannya", "Roni menyiram tanaman", "Roni memberi pupuk", "Tanaman Roni tumbuh subur"], 
+                jawabanBenar: "Roni selalu merawat tanamannya" 
+            },
+            { 
+                soal: "Ide pendukung biasanya berjumlah ... dalam satu paragraf.", 
+                pilihan: ["Lebih dari satu kalimat", "Hanya satu kata saja", "Pasti tidak ada", "Sama dengan jumlah halaman"], 
+                jawabanBenar: "Lebih dari satu kalimat" 
+            },
+            { 
+                soal: "<i>'Susu sangat baik untuk kesehatan tubuh kita. Susu mengandung kalsium untuk pertumbuhan tulang. Selain itu, vitamin di dalam susu bisa menjaga daya tahan tubuh.'</i><br><br>Ide pokok paragraf tersebut terletak di ... paragraf.", 
+                pilihan: ["Awal", "Akhir", "Tengah", "Luar"], 
+                jawabanBenar: "Awal" 
+            },
+            { 
+                soal: "Jika ide pokok sudah ditemukan, maka kalimat-kalimat yang lain dalam paragraf tersebut berfungsi sebagai ...", 
+                pilihan: ["Penjelas / Pendukung", "Judul baru", "Pertanyaan", "Hiasan saja"], 
+                jawabanBenar: "Penjelas / Pendukung" 
+            }
+        ];
+
+        const warnaTombol = ["#E51C23", "#00B0FF", "#FF9800", "#4CAF50"];
+        let sisaPertanyaan = [];
+        let pertanyaanAktif = null;
+        let nyawa = 3;
+        let skor = 0;
+        let sedangAnimasi = false;
+
+        function mulaiKuisBahasaIndonesia() {
+            modal.style.display = "none";
+            document.getElementById('page-wheel').classList.add('hidden');
+            document.getElementById('page-game').classList.remove('hidden');
+
+            nyawa = 3;
+            skor = 0;
+            sedangAnimasi = false;
+            sisaPertanyaan = [...databaseSoal];
+            riwayatJawabanSesiIni = []; 
+
+            perbaruiStatusGame();
+            pilihPertanyaanAcak();
+        }
+
+        function perbaruiStatusGame() {
+            document.getElementById('info-nama-game').innerText = `Siswa: ${namaSiswa}`;
+            document.getElementById('info-nyawa').innerText = `❤️ Nyawa: ${nyawa}`;
+            document.getElementById('info-skor').innerText = `Skor: ${skor}`;
+        }
+
+        function pilihPertanyaanAcak() {
+            if (sisaPertanyaan.length === 0) return;
+            const indeksAcak = Math.floor(Math.random() * sisaPertanyaan.length);
+            pertanyaanAktif = sisaPertanyaan[indeksAcak];
+
+            const txtSoal = document.getElementById('target-soal');
+            txtSoal.className = "";
+            txtSoal.innerHTML = pertanyaanAktif.soal;
+            
+            let pilihanAcak = [...pertanyaanAktif.pilihan];
+            for (let i = pilihanAcak.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [pilihanAcak[i], pilihanAcak[j]] = [pilihanAcak[j], pilihanAcak[i]];
+            }
+
+            const letakBenar = pilihanAcak.indexOf(pertanyaanAktif.jawabanBenar) + 1;
+            riwayatJawabanSesiIni.push({
+                soal: pertanyaanAktif.soal.replace(/<[^>]*>/g, ''), 
+                posisiBenar: letakBenar,
+                teksBenar: pertanyaanAktif.jawabanBenar
+            });
+
+            buatTombolJawaban(pilihanAcak);
+            setTimeout(() => { txtSoal.className = "slide-in"; }, 20);
+        }
+
+        function buatTombolJawaban(arrayPilihan) {
+            const grid = document.getElementById('grid-jawaban');
+            grid.innerHTML = '';
+            arrayPilihan.forEach((teksJawaban, indeks) => {
+                const tombol = document.createElement('button');
+                tombol.className = 'btn-jawaban';
+                tombol.innerText = teksJawaban;
+                tombol.style.backgroundColor = warnaTombol[indeks];
+                tombol.onclick = () => cekJawaban(teksJawaban, tombol);
+                grid.appendChild(tombol);
+            });
+        }
+
+        function cekJawaban(jawabanDipilih, elemenTombol) {
+            if (sedangAnimasi) return;
+            sedangAnimasi = true;
+            const feedbackEl = document.getElementById('feedback');
+
+            if (jawabanDipilih === pertanyaanAktif.jawabanBenar) {
+                mainkanSuaraGame('benar');
+                skor += 10;
+                feedbackEl.innerText = "✓";
+                feedbackEl.className = "correct-feedback";
+                sisaPertanyaan = sisaPertanyaan.filter(item => item.soal !== pertanyaanAktif.soal);
+
+                setTimeout(() => {
+                    feedbackEl.className = "";
+                    perbaruiStatusGame();
+                    gantiSoalMaju();
+                    sedangAnimasi = false;
+                }, 600);
+            } else {
+                mainkanSuaraGame('salah');
+                nyawa--;
+                feedbackEl.innerText = "✕";
+                feedbackEl.className = "wrong-feedback";
+                elemenTombol.classList.add('shake');
+
+                setTimeout(() => {
+                    feedbackEl.className = "";
+                    elemenTombol.classList.remove('shake');
+                    perbaruiStatusGame();
+                    if (nyawa <= 0) {
+                        simpanDanTampilkanLeaderboard(false);
+                    } else {
+                        gantiSoalMaju();
+                    }
+                    sedangAnimasi = false;
+                }, 600);
+            }
+        }
+
+        function gantiSoalMaju() {
+            const txtSoal = document.getElementById('target-soal');
+            txtSoal.className = "slide-out";
+            setTimeout(() => {
+                if (sisaPertanyaan.length === 0) {
+                    simpanDanTampilkanLeaderboard(true);
+                    return;
+                }
+                pilihPertanyaanAcak(); 
+            }, 400);
+        }
+
+        function dapatkanDataLeaderboard() {
+            return JSON.parse(localStorage.getItem('kuisIndoIdePokokLeaderboard')) || [];
+        }
+
+        function simpanDanTampilkanLeaderboard(apakahMenang) {
+            document.getElementById('page-game').classList.add('hidden');
+            let leaderboardData = dapatkanDataLeaderboard();
+            
+            let dataSiswaLama = leaderboardData.find(item => item.nama === namaSiswa);
+            if (dataSiswaLama) {
+                if (skor > dataSiswaLama.skor) dataSiswaLama.skor = skor;
+            } else {
+                leaderboardData.push({ nama: namaSiswa, skor: skor });
+            }
+
+            leaderboardData.sort((a, b) => b.skor - a.skor);
+            localStorage.setItem('kuisIndoIdePokokLeaderboard', JSON.stringify(leaderboardData));
+
+            if(apakahMenang) {
+                document.getElementById('skor-akhir-menang').innerText = `Skor Akhir Kamu: ${skor}`;
+                isiTabelLeaderboard('tabel-leaderboard-menang', leaderboardData);
+                document.getElementById('page-win').classList.remove('hidden');
+            } else {
+                document.getElementById('skor-akhir-kalah').innerText = `Skor Akhir Kamu: ${skor}`;
+                isiTabelLeaderboard('tabel-leaderboard-kalah', leaderboardData);
+                document.getElementById('page-game-over').classList.remove('hidden');
+            }
+        }
+
+        function isiTabelLeaderboard(idTabel, data) {
+            const tbody = document.getElementById(idTabel).getElementsByTagName('tbody')[0];
+            tbody.innerHTML = "";
+            data.forEach((item, indeks) => {
+                let row = tbody.insertRow();
+                let cellRank = row.insertCell(0);
+                let cellNama = row.insertCell(1);
+                let cellSkor = row.insertCell(2);
+
+                cellRank.innerHTML = indeks === 0 ? `🥇 1` : indeks + 1;
+                cellNama.innerText = item.nama;
+                cellSkor.innerText = item.skor;
+
+                if(item.nama === namaSiswa) {
+                    row.style.fontWeight = 'bold';
+                    row.style.backgroundColor = '#fff3bf';
+                }
+            });
+        }
+
+        function kembaliKeRoda(apakahEliminasi) {
+            document.getElementById('page-game-over').classList.add('hidden');
+            document.getElementById('page-win').classList.add('hidden');
+            document.getElementById('page-wheel').classList.remove('hidden');
+
+            if (apakahEliminasi && selectedIndex !== null) {
+                names.splice(selectedIndex, 1);
+                namesInput.value = names.join("\n");
+                selectedIndex = null;
+            }
+            updateWheelData();
+        }
+
+        function cetakHalaman() { window.print(); }
+
+        function simpanKeFileTeks() {
+            let data = dapatkanDataLeaderboard();
+            if(data.length === 0) { alert("Belum ada data nilai!"); return; }
+            let isiTeks = "=== DAFTAR NILAI \"IDE POKOK & PENDUKUNG\" ===\r\n\r\n";
+            data.forEach((item, indeks) => { isiTeks += `${indeks + 1}. Nama: ${item.nama} | Skor: ${item.skor}\r\n`; });
+            
+            if(riwayatJawabanSesiIni.length > 0) {
+                isiTeks += "\r\n=== LOG LETAK JAWABAN BENAR SESI TERAKHIR (" + namaSiswa + ") ===\r\n";
+                riwayatJawabanSesiIni.forEach((item, indeks) => {
+                    isiTeks += `${indeks + 1}. Soal: ${item.soal}\r\n   -> Letak Jawaban Benar: Pilihan/Tombol ke-${item.posisiBenar} [${item.teksBenar}]\r\n`;
+                });
+            }
+
+            let blob = new Blob([isiTeks], { type: "text/plain;charset=utf-8" });
+            let linkUnduh = document.createElement("a");
+            linkUnduh.href = URL.createObjectURL(blob);
+            linkUnduh.download = `daftar_nilai_dan_log_sesi_${namaSiswa}.txt`;
+            document.body.appendChild(linkUnduh);
+            linkUnduh.click();
+            document.body.removeChild(linkUnduh);
+        }
+
+        function resetLeaderboardData() {
+            if (confirm("Hapus semua riwayat nilai murid?")) {
+                localStorage.removeItem('kuisIndoIdePokokLeaderboard');
+                isiTabelLeaderboard('tabel-leaderboard-kalah', []);
+                isiTabelLeaderboard('tabel-leaderboard-menang', []);
+                alert("Data berhasil dibersihkan!");
+            }
+        }
+
+        function toggleFullscreen() {
+            const btnText = document.getElementById("fullscreen-text");
+            if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+                const docElm = document.documentElement;
+                if (docElm.requestFullscreen) { docElm.requestFullscreen(); } 
+                else if (docElm.webkitRequestFullscreen) { docElm.webkitRequestFullscreen(); } 
+                else if (docElm.msRequestFullscreen) { docElm.msRequestFullscreen(); }
+                btnText.innerText = "";
+            } else {
+                if (document.exitFullscreen) { document.exitFullscreen(); } 
+                else if (document.webkitExitFullscreen) { document.webkitExitFullscreen(); } 
+                else if (document.msExitFullscreen) { document.msExitFullscreen(); }
+                btnText.innerText = "";
+            }
+        }
+
+        function monitorFullscreenChange() {
+            const btnText = document.getElementById("fullscreen-text");
+            if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+                btnText.innerText = "";
+            }
+        }
+        document.addEventListener('fullscreenchange', monitorFullscreenChange);
+        document.addEventListener('webkitfullscreenchange', monitorFullscreenChange);
+        document.addEventListener('msfullscreenchange', monitorFullscreenChange);
+
+        namesInput.addEventListener("input", updateWheelData);
+        updateWheelData();
+    </script>
+</body>
+</html>

@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roda Game Hub - Koleksi Game Edukasi Kelas 3 SD</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0b1020;
+    --bg-2: #111834;
+    --card: rgba(255,255,255,.055);
+    --card-brd: rgba(255,255,255,.10);
+    --txt: #eef2ff;
+    --muted: #9aa6c4;
+    --brand: #6366f1;
+    --brand-2: #22d3ee;
+    --ok: #34d399;
+  }
+
+  html, body { height: 100%; }
+
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background:
+      radial-gradient(1100px 600px at 10% -10%, rgba(99,102,241,.35), transparent 60%),
+      radial-gradient(900px 500px at 110% 0%, rgba(34,211,238,.22), transparent 55%),
+      linear-gradient(160deg, var(--bg), var(--bg-2) 60%, #0b1020);
+    background-attachment: fixed;
+    color: var(--txt);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---------- HEADER ---------- */
+  header {
+    position: sticky; top: 0; z-index: 40;
+    backdrop-filter: blur(14px);
+    background: rgba(11,16,32,.72);
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+  .nav {
+    max-width: 1200px; margin: 0 auto; padding: 14px 20px;
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  }
+  .logo {
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 800; font-size: 18px; letter-spacing: .3px;
+    cursor: pointer; user-select: none;
+  }
+  .logo .mark {
+    width: 36px; height: 36px; border-radius: 11px;
+    display: grid; place-items: center; font-size: 19px;
+    background: linear-gradient(135deg, var(--brand), var(--brand-2));
+    box-shadow: 0 8px 22px rgba(99,102,241,.45);
+  }
+  .logo b { color: var(--brand-2); }
+  .nav .spacer { flex: 1; }
+
+  .search {
+    position: relative; flex: 1; min-width: 220px; max-width: 420px;
+  }
+  .search input {
+    width: 100%; padding: 11px 14px 11px 38px;
+    border-radius: 12px; border: 1px solid var(--card-brd);
+    background: rgba(255,255,255,.06); color: var(--txt);
+    font-size: 14px; outline: none; transition: .2s;
+  }
+  .search input::placeholder { color: var(--muted); }
+  .search input:focus {
+    border-color: rgba(99,102,241,.75);
+    box-shadow: 0 0 0 4px rgba(99,102,241,.18);
+    background: rgba(255,255,255,.09);
+  }
+  .search svg {
+    position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+    width: 17px; height: 17px; stroke: var(--muted);
+  }
+
+  /* ---------- HERO ---------- */
+  .hero { max-width: 1200px; margin: 0 auto; padding: 34px 20px 6px; }
+  .hero h1 {
+    font-size: clamp(26px, 4vw, 42px); font-weight: 800; line-height: 1.15;
+    background: linear-gradient(90deg, #fff, #a5b4fc 45%, #22d3ee);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .hero p { color: var(--muted); margin-top: 10px; font-size: 15px; max-width: 640px; }
+  .stats { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+  .stat {
+    background: var(--card); border: 1px solid var(--card-brd);
+    padding: 8px 14px; border-radius: 999px; font-size: 13px; color: var(--muted);
+    display: flex; align-items: center; gap: 7px;
+  }
+  .stat b { color: var(--txt); font-size: 14px; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 8px var(--ok); }
+
+  /* ---------- FILTERS ---------- */
+  .filters {
+    max-width: 1200px; margin: 24px auto 0; padding: 0 20px;
+    display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+  }
+  .chip {
+    border: 1px solid var(--card-brd); background: var(--card);
+    color: var(--muted); padding: 8px 15px; border-radius: 999px;
+    font-size: 13px; font-weight: 600; cursor: pointer; transition: .18s;
+    white-space: nowrap;
+  }
+  .chip:hover { color: var(--txt); border-color: rgba(255,255,255,.25); transform: translateY(-1px); }
+  .chip.active {
+    background: linear-gradient(135deg, var(--brand), #8b5cf6);
+    color: #fff; border-color: transparent;
+    box-shadow: 0 8px 20px rgba(99,102,241,.35);
+  }
+  .sep { width: 1px; height: 22px; background: rgba(255,255,255,.14); margin: 0 4px; }
+
+  /* ---------- GRID ---------- */
+  .grid {
+    max-width: 1200px; margin: 22px auto 0; padding: 0 20px 60px;
+    display: grid; gap: 18px;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  }
+
+  .card {
+    position: relative; overflow: hidden;
+    background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.035));
+    border: 1px solid var(--card-brd); border-radius: 18px;
+    padding: 20px; display: flex; flex-direction: column; gap: 12px;
+    transition: transform .22s, border-color .22s, box-shadow .22s;
+    animation: pop .4s cubic-bezier(.2,.8,.3,1) both;
+  }
+  @keyframes pop { from { opacity: 0; transform: translateY(14px); } }
+  .card::before {
+    content: ""; position: absolute; inset: 0 0 auto 0; height: 3px;
+    background: linear-gradient(90deg, var(--c1), var(--c2));
+  }
+  .card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(255,255,255,.22);
+    box-shadow: 0 18px 40px rgba(0,0,0,.45);
+  }
+  .card .top { display: flex; align-items: flex-start; gap: 13px; }
+  .icon {
+    width: 52px; height: 52px; border-radius: 15px; flex: none;
+    display: grid; place-items: center; font-size: 25px;
+    background: linear-gradient(135deg, var(--c1), var(--c2));
+    box-shadow: 0 10px 24px rgba(0,0,0,.35);
+  }
+  .card h3 { font-size: 16.5px; line-height: 1.3; font-weight: 700; }
+  .badges { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 7px; }
+  .badge {
+    font-size: 10.5px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 6px;
+    background: rgba(255,255,255,.09); color: var(--muted);
+    border: 1px solid rgba(255,255,255,.08);
+  }
+  .badge.subj { background: rgba(34,211,238,.12); color: #67e8f9; border-color: rgba(34,211,238,.22); }
+  .card p.desc { color: var(--muted); font-size: 13.5px; line-height: 1.55; flex: 1; }
+
+  .card .foot { display: flex; align-items: center; gap: 10px; margin-top: 2px; }
+  .play {
+    flex: 1; border: none; cursor: pointer;
+    padding: 11px 16px; border-radius: 12px;
+    font-size: 14px; font-weight: 700; color: #fff;
+    background: linear-gradient(135deg, var(--c1), var(--c2));
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: .18s; box-shadow: 0 10px 22px rgba(0,0,0,.3);
+  }
+  .play:hover { filter: brightness(1.12); transform: translateY(-1px); }
+  .play:active { transform: translateY(1px); }
+  .played {
+    font-size: 11.5px; color: var(--ok); font-weight: 700;
+    display: flex; align-items: center; gap: 5px; white-space: nowrap;
+  }
+  .played::before { content: "✓"; display: grid; place-items: center;
+    width: 16px; height: 16px; border-radius: 50%; background: rgba(52,211,153,.16);
+    border: 1px solid rgba(52,211,153,.4); font-size: 10px; }
+
+  .empty {
+    grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--muted);
+  }
+  .empty .big { font-size: 44px; margin-bottom: 12px; }
+
+  footer {
+    text-align: center; color: var(--muted); font-size: 13px;
+    padding: 22px 20px 34px; border-top: 1px solid rgba(255,255,255,.07);
+  }
+
+  /* ---------- PLAYER ---------- */
+  .player {
+    position: fixed; inset: 0; z-index: 100;
+    background: #05070f; display: none; flex-direction: column;
+  }
+  .player.open { display: flex; animation: fade .22s ease both; }
+  @keyframes fade { from { opacity: 0; } }
+
+  .bar {
+    display: flex; align-items: center; gap: 12px;
+    padding: 9px 14px; background: rgba(17,24,52,.95);
+    border-bottom: 1px solid rgba(255,255,255,.10);
+    backdrop-filter: blur(10px);
+  }
+  .bar button {
+    border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.07);
+    color: var(--txt); padding: 8px 13px; border-radius: 10px;
+    font-size: 13.5px; font-weight: 600; cursor: pointer; transition: .16s;
+    display: flex; align-items: center; gap: 7px;
+  }
+  .bar button:hover { background: rgba(255,255,255,.14); }
+  .bar .back { background: linear-gradient(135deg, var(--brand), #8b5cf6); border-color: transparent; }
+  .bar .back:hover { filter: brightness(1.12); }
+  .bar .title { flex: 1; font-size: 14px; font-weight: 700; white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis; color: #c7d2fe; }
+  .bar .title span { color: var(--muted); font-weight: 500; }
+
+  .stage { flex: 1; position: relative; background: #05070f; }
+  .stage iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #fff; }
+  .loading {
+    position: absolute; inset: 0; display: grid; place-items: center;
+    background: #05070f; z-index: 2; gap: 14px; text-align: center;
+    color: var(--muted); font-size: 14px;
+  }
+  .spinner {
+    width: 44px; height: 44px; border-radius: 50%;
+    border: 4px solid rgba(255,255,255,.12); border-top-color: var(--brand-2);
+    animation: spin .8s linear infinite; margin: 0 auto 14px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 640px) {
+    .nav { padding: 12px 14px; }
+    .logo span.txt { display: none; }
+    .hero { padding: 24px 16px 4px; }
+    .filters, .grid { padding-left: 16px; padding-right: 16px; }
+    .bar .title { display: none; }
+    .bar .newtab { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <div class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+      <div class="mark">🎡</div>
+      <span class="txt">RODA <b>GAME HUB</b></span>
+    </div>
+    <div class="spacer"></div>
+    <div class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <input id="q" type="search" placeholder="Cari game, mata pelajaran..." autocomplete="off">
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <h1>Semua Game Edukasi dalam Satu Tempat</h1>
+  <p>Pilih game dari daftar di bawah, lalu tekan tombol <b>Mainkan</b>. Game langsung terbuka di dalam aplikasi dan bisa dikembalikan kapan saja.</p>
+  <div class="stats">
+    <div class="stat"><span class="dot"></span> Sistem siap</div>
+    <div class="stat"><b id="total">0</b> game tersedia</div>
+    <div class="stat"><b id="folders">2</b> koleksi folder</div>
+    <div class="stat"><b id="playedCount">0</b> sudah dimainkan</div>
+  </div>
+</section>
+
+<div class="filters" id="filters"></div>
+
+<main class="grid" id="grid"></main>
+
+<footer>Roda Game Hub &nbsp;•&nbsp; Wadah kumpulan game interaktif kelas 3 SD</footer>
+
+<!-- PLAYER -->
+<div class="player" id="player">
+  <div class="bar">
+    <button class="back" onclick="closeGame()">← Kembali</button>
+    <div class="title" id="pTitle"></div>
+    <button onclick="toggleFs()" title="Layar penuh">⛶ Layar Penuh</button>
+    <button class="newtab" onclick="openNewTab()" title="Buka di tab baru">↗ Tab Baru</button>
+  </div>
+  <div class="stage">
+    <div class="loading" id="loading">
+      <div>
+        <div class="spinner"></div>
+        <div>Memuat game...</div>
+      </div>
+    </div>
+    <iframe id="frame" title="Game"></iframe>
+  </div>
+</div>
+
+<script>
+const GAMES = [
+  // ---------- INTERAKTIF ----------
+  { f:"INTERAKTIF", p:"roda.html", t:"Roda Acak Berputar", subj:"Alat Interaktif",
+    d:"Spin wheel ala Wordwall. Tulis daftar nama atau opsi, putar rodanya, dan biarkan keberuntungan memilih.",
+    e:"🎡", c:["#6366f1","#22d3ee"] },
+  { f:"INTERAKTIF", p:"basa_jawa.html", t:"Kuis Basa Jawa", subj:"Bahasa Jawa",
+    d:"Kuis pinter Basa Jawa untuk kelas 3 SD dengan tantangan pilihan ganda dan skor di akhir permainan.",
+    e:"🗣️", c:["#f59e0b","#f97316"] },
+  { f:"INTERAKTIF", p:"game_bahasa.html", t:"Kuis Bahasa Indonesia", subj:"Bahasa Indonesia",
+    d:"Game kuis Pintar Bahasa Indonesia kelas 3 SD. Uji pemahaman tata bahasa, kosakata, dan bacaan.",
+    e:"📖", c:["#ec4899","#f43f5e"] },
+  { f:"INTERAKTIF", p:"kata-sifat.html", t:"Game Kata Sifat", subj:"Bahasa Indonesia",
+    d:"Asah kemampuan memilih kata sifat yang tepat untuk setiap tokoh, benda, dan situasi.",
+    e:"✏️", c:["#8b5cf6","#d946ef"] },
+  { f:"INTERAKTIF", p:"kelas_3_ipas_bab_1.html", t:"Kuis IPAS Bab 1", subj:"IPAS",
+    d:"Kuis IPAS Bab 1 kelas 3 SD seputar lingkungan dan makhluk hidup dengan umpan balik langsung.",
+    e:"🔬", c:["#10b981","#84cc16"] },
+  { f:"INTERAKTIF", p:"lagu_daerah.html", t:"Lagu Daerah & Provinsi", subj:"Sosial",
+    d:"Tebak lagu daerah dan cocokkan dengan provinsi asalnya. Belajar sambil bernyanyi!",
+    e:"🎶", c:["#0ea5e9","#6366f1"] },
+  { f:"INTERAKTIF", p:"pasangkan_lambang_pancasila.html", t:"Pasangkan Lambang Pancasila", subj:"PPKn",
+    d:"Cocokkan setiap lambang sila Pancasila dengan arti dan bunyinya secara tepat.",
+    e:"🦅", c:["#ef4444","#f59e0b"] },
+  { f:"INTERAKTIF", p:"pre-test_bahasa.html", t:"Pre-Test Bahasa Indonesia", subj:"Bahasa Indonesia",
+    d:"Pre-test diagnostik bahasa Indonesia kelas 3 untuk mengukur kemampuan awal siswa.",
+    e:"📝", c:["#f43f5e","#fb923c"] },
+  { f:"INTERAKTIF", p:"Pre-Test_Bahasa_Inggris.html", t:"Pre-Test Bahasa Inggris", subj:"Bahasa Inggris",
+    d:"Pre-test diagnostik Bahasa Inggris kelas 3 dengan hasil skor dan apresiasi di akhir.",
+    e:"🌐", c:["#22d3ee","#3b82f6"] },
+  { f:"INTERAKTIF", p:"pre-test_matematika.html", t:"Pre-Test Matematika", subj:"Matematika",
+    d:"Pre-test diagnostik matematika kelas 3 untuk memetakan pemahaman operasi hitung siswa.",
+    e:"🔢", c:["#14b8a6","#0ea5e9"] },
+  { f:"INTERAKTIF", p:"suku_daerah.html", t:"Suku & Provinsi Indonesia", subj:"Sosial",
+    d:"Kenali suku bangsa dan provinsi di Indonesia. Cocokkan ciri khas dengan daerah asalnya.",
+    e:"🗺️", c:["#84cc16","#22c55e"] },
+
+  // ---------- INTERAKTIF + RODA ----------
+  { f:"INTERAKTIF+RODA", p:"aku-dan-temanku-BVR.html", t:"Aku dan Temanku", subj:"PPKn",
+    d:"Kuis Pendidikan Pancasila kelas 3 SD tentang perilaku bergaul dan bergotong royong dengan teman.",
+    e:"🤝", c:["#f43f5e","#f97316"] },
+  { f:"INTERAKTIF+RODA", p:"bahasa-indonesia-idepokok-BVR.html", t:"Ide Pokok & Ide Pendukung", subj:"Bahasa Indonesia",
+    d:"Kuis bahasa Indonesia kelas 3 SD tentang menemukan ide pokok dan ide pendukung dalam bacaan.",
+    e:"💡", c:["#a855f7","#ec4899"] },
+  { f:"INTERAKTIF+RODA", p:"basa Jawa-unggah-ungguh-basa-BVR.html", t:"Unggah Ungguh Basa", subj:"Bahasa Jawa",
+    d:"Kuis bahasa Jawa kelas 3 SD tentang tata krama berbahasa Jawa dalam percakapan sehari-hari.",
+    e:"🏮", c:["#f59e0b","#eab308"] },
+  { f:"INTERAKTIF+RODA", p:"greeting.html", t:"Greetings & Parting", subj:"Bahasa Inggris",
+    d:"Kuis Bahasa Inggris kelas 3 SD tentang ungkapan sapaan (greeting) dan perpisahan (parting).",
+    e:"👋", c:["#3b82f6","#06b6d4"] },
+  { f:"INTERAKTIF+RODA", p:"mtk-perkalian.html", t:"Perkalian Soal Cerita", subj:"Matematika",
+    d:"Kuis perkalian kelas 3 SD berbentuk soal cerita yang melatih penalaran matematis siswa.",
+    e:"✖️", c:["#22c55e","#14b8a6"] },
+  { f:"INTERAKTIF+RODA", p:"panca-indera-BVR.html", t:"Panca Indera: Kalimat & Gambar", subj:"IPAS",
+    d:"Memasangkan kalimat dengan gambar yang tepat seputar fungsi panca indera.",
+    e:"👀", c:["#f97316","#ef4444"] },
+  { f:"INTERAKTIF+RODA", p:"pancaindra-BVR.html", t:"Kuis Pancaindra", subj:"IPAS",
+    d:"Kuis IPAS kelas 3 SD tentang panca indera: fungsi, organ, dan cara menjaga kesehatannya.",
+    e:"🧠", c:["#6366f1","#8b5cf6"] }
+];
+
+const state = { folder: "SEMUA", subj: "SEMUA", q: "", current: null };
+
+const $ = s => document.querySelector(s);
+const grid = $("#grid");
+
+const folderLabel = f => f === "INTERAKTIF" ? "Interaktif" : "Interaktif + Roda";
+const encodePath = g => encodeURIComponent(g.f) + "/" + encodeURIComponent(g.p);
+
+function getPlayed() {
+  try { return JSON.parse(localStorage.getItem("hub_played") || "[]"); }
+  catch (e) { return []; }
+}
+function markPlayed(path) {
+  try {
+    const list = getPlayed();
+    if (!list.includes(path)) { list.push(path); localStorage.setItem("hub_played", JSON.stringify(list)); }
+  } catch (e) {}
+}
+
+/* ---------- FILTER CHIPS ---------- */
+function buildFilters() {
+  const subjects = [...new Set(GAMES.map(g => g.subj))];
+  const wrap = $("#filters");
+  let html = "";
+  html += `<button class="chip active" data-k="folder" data-v="SEMUA">Semua Folder</button>`;
+  html += `<button class="chip" data-k="folder" data-v="INTERAKTIF">📁 Interaktif</button>`;
+  html += `<button class="chip" data-k="folder" data-v="INTERAKTIF+RODA">📁 Interaktif + Roda</button>`;
+  html += `<span class="sep"></span>`;
+  html += `<button class="chip active" data-k="subj" data-v="SEMUA">Semua Mapel</button>`;
+  subjects.forEach(s => { html += `<button class="chip" data-k="subj" data-v="${s}">${s}</button>`; });
+  wrap.innerHTML = html;
+  wrap.addEventListener("click", e => {
+    const btn = e.target.closest(".chip"); if (!btn) return;
+    const k = btn.dataset.k;
+    state[k] = btn.dataset.v;
+    wrap.querySelectorAll(`.chip[data-k="${k}"]`).forEach(c => c.classList.toggle("active", c === btn));
+    render();
+  });
+}
+
+/* ---------- RENDER ---------- */
+function render() {
+  const played = getPlayed();
+  const q = state.q.trim().toLowerCase();
+  const list = GAMES.filter(g => {
+    if (state.folder !== "SEMUA" && g.f !== state.folder) return false;
+    if (state.subj !== "SEMUA" && g.subj !== state.subj) return false;
+    if (q && !(g.t + " " + g.subj + " " + g.d + " " + g.f).toLowerCase().includes(q)) return false;
+    return true;
+  });
+
+  $("#total").textContent = GAMES.length;
+  $("#playedCount").textContent = played.length;
+
+  if (!list.length) {
+    grid.innerHTML = `<div class="empty"><div class="big">🔍</div>
+      <div style="font-size:17px;font-weight:700;color:#eef2ff">Game tidak ditemukan</div>
+      <div style="margin-top:6px">Coba kata kunci atau filter lainnya.</div></div>`;
+    return;
+  }
+
+  grid.innerHTML = list.map((g, i) => {
+    const isPlayed = played.includes(g.f + "/" + g.p);
+    return `
+    <article class="card" style="--c1:${g.c[0]};--c2:${g.c[1]};animation-delay:${i * 35}ms">
+      <div class="top">
+        <div class="icon">${g.e}</div>
+        <div>
+          <h3>${g.t}</h3>
+          <div class="badges">
+            <span class="badge subj">${g.subj}</span>
+            <span class="badge">${folderLabel(g.f)}</span>
+          </div>
+        </div>
+      </div>
+      <p class="desc">${g.d}</p>
+      <div class="foot">
+        <button class="play" onclick="play('${g.f.replace(/'/g, "\\'")}','${g.p.replace(/'/g, "\\'")}')">▶ Mainkan</button>
+        ${isPlayed ? `<span class="played">Dimainkan</span>` : ``}
+      </div>
+    </article>`;
+  }).join("");
+}
+
+/* ---------- PLAYER ---------- */
+function play(folder, path) {
+  const g = GAMES.find(x => x.f === folder && x.p === path); if (!g) return;
+  state.current = g;
+  markPlayed(g.f + "/" + g.p);
+  const url = encodeURIComponent(g.f) + "/" + encodeURIComponent(g.p);
+
+  $("#pTitle").innerHTML = `${g.e} ${g.t} <span>• ${folderLabel(g.f)}</span>`;
+  $("#loading").style.display = "grid";
+  $("#player").classList.add("open");
+  document.body.style.overflow = "hidden";
+
+  const frame = $("#frame");
+  frame.onload = () => { $("#loading").style.display = "none"; };
+  frame.src = url;
+
+  try {
+    const list = JSON.parse(localStorage.getItem("hub_recent") || "[]");
+    const rest = list.filter(x => x !== g.f + "/" + g.p);
+    rest.unshift(g.f + "/" + g.p);
+    localStorage.setItem("hub_recent", JSON.stringify(rest.slice(0, 8)));
+  } catch (e) {}
+
+  render();
+}
+
+function closeGame() {
+  const p = $("#player");
+  p.classList.remove("open");
+  document.body.style.overflow = "";
+  const frame = $("#frame");
+  frame.src = "about:blank";
+  if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+}
+
+function toggleFs() {
+  const el = $("#player");
+  if (!document.fullscreenElement) {
+    (el.requestFullscreen || el.webkitRequestFullscreen || (() => {})).call(el);
+  } else {
+    document.exitFullscreen();
+  }
+}
+
+function openNewTab() {
+  if (!state.current) return;
+  window.open(encodeURIComponent(state.current.f) + "/" + encodeURIComponent(state.current.p), "_blank");
+}
+
+/* ---------- EVENTS ---------- */
+$("#q").addEventListener("input", e => { state.q = e.target.value; render(); });
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") {
+    if (document.fullscreenElement) return;
+    if ($("#player").classList.contains("open")) closeGame();
+  }
+});
+
+buildFilters();
+render();
+</script>
+</body>
+</html>
