@@ -273,7 +273,234 @@
         }
 
         .hidden { display: none !important; }
+    
+
+    /* ===== OPTIMASI LAYAR HP (tanpa scroll) ===== */
+@media (max-width: 700px), (orientation: landscape) and (max-height: 520px) {
+  html, body { height: 100%; overflow: hidden; }
+  body { min-height: 100vh; min-height: 100dvh; }
+  #game-container { height: 100vh; height: 100dvh; min-height: 0; max-height: none; padding: 44px 10px 14px; }
+  #btn-fullscreen { top: 6px; right: 8px; width: 32px; height: 32px; }
+  #btn-fullscreen svg { width: 17px; height: 17px; }
+  #status-bar { font-size: 1.05rem; padding: 0 4px; margin-bottom: 6px; }
+  .top-border { gap: 4px; margin-bottom: 8px; }
+  .dash { width: 14px; height: 8px; min-width: 3px; flex-shrink: 1; }
+  .provinsi-container { flex: 1 1 auto; min-height: 64px; margin: 6px 0; padding: 6px 4px; }
+  .provinsi-container > div,
+  #target-soal, #target-lagu, #target-suku { font-size: clamp(1.1rem, 5vw, 1.65rem); line-height: 1.35; }
+  #feedback { font-size: 4.5rem; top: 38%; }
+  #grid-jawaban { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 0; margin-bottom: 8px; max-width: 100%; }
+  .btn-jawaban { font-size: 1.05rem; min-height: 76px; padding: 10px 8px; border-radius: 14px; line-height: 1.25; overflow-wrap: anywhere; }
+  .screen { padding: 24px 14px; }
+  .screen h1, #start-screen h1 { font-size: 1.75rem; margin-bottom: 10px; }
+  .screen h3 { font-size: 1.05rem !important; margin-top: 8px !important; }
+  .screen p, #start-screen p { font-size: 1rem !important; margin-bottom: 16px !important; }
+  .btn-action { padding: 14px 30px; font-size: 1.1rem; }
+    }
     </style>
+<style id="PAKSA-LANDSCAPE-STYLE">
+/* =========================================================================
+   PAKSA LANDSCAPE • TANPA SCROLL V/H • SOAL + TOMBOL JAWABAN SATU LAYAR
+   ========================================================================= */
+html, body {
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+  width: 100%;
+  max-width: 100%;
+}
+html { height: 100%; }
+body {
+  height: 100vh !important;
+  height: 100dvh !important;
+  min-height: 0 !important;
+  touch-action: manipulation;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Kontainer utama selalu pas tinggi lebar layar, tidak pernah meluber */
+#game-container, #main-app-container {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+#game-container > *, #main-app-container > * { min-width: 0; }
+.wheel-page, .game-page, .screen, .soal-container, .provinsi-container { min-width: 0; }
+
+/* ---- Area soal: selalu kebagian sisa ruang, huruf menyesuaikan ---- */
+.provinsi-container, .soal-container {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+.soal-container {
+  gap: clamp(4px, 1.6vh, 15px) !important;
+  padding: clamp(4px, 1.5vh, 10px) !important;
+}
+.provinsi-container > div,
+#target-soal, #target-lagu, #target-suku {
+  font-size: clamp(1rem, 4.4vh, 2rem) !important;
+  line-height: 1.3 !important;
+  overflow: hidden;
+}
+.btn-audio {
+  padding: clamp(5px, 1.6vh, 10px) clamp(12px, 3vw, 20px) !important;
+  font-size: clamp(0.8rem, 3.2vh, 1.1rem) !important;
+  flex: 0 0 auto;
+}
+
+/* ---- Tombol jawaban pilihan ganda: 2 kolom, tinggi mengikuti layar ---- */
+#grid-jawaban, #grid-provinsi {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: clamp(6px, 1.8vh, 20px) !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0;
+}
+.btn-jawaban, .btn-provinsi {
+  min-height: clamp(38px, 15vh, 100px) !important;
+  font-size: clamp(0.9rem, 3.8vh, 1.5rem) !important;
+  padding: clamp(5px, 1.5vh, 20px) clamp(6px, 1.5vw, 25px) !important;
+  line-height: 1.25 !important;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* ---- Bar status, garis dekorasi, ikon benar/salah ---- */
+#status-bar {
+  font-size: clamp(0.85rem, 3.2vh, 1.8rem) !important;
+  gap: clamp(4px, 1.6vw, 10px);
+  margin-bottom: clamp(2px, 0.9vh, 10px) !important;
+  padding-bottom: clamp(2px, 0.9vh, 8px) !important;
+}
+.dash { height: clamp(4px, 1.8vh, 14px); }
+#feedback { font-size: clamp(3rem, 17vh, 7rem) !important; }
+
+/* ---- Layar awal / menang / kalah ---- */
+.screen { overflow: hidden !important; padding: clamp(10px, 3.5vh, 40px) clamp(12px, 4vw, 40px) !important; }
+.screen h1, #start-screen h1 { font-size: clamp(1.3rem, 6.2vh, 3.5rem) !important; margin-bottom: clamp(6px, 2.4vh, 20px) !important; }
+.screen p, #start-screen p { font-size: clamp(0.9rem, 3.4vh, 1.8rem) !important; margin-bottom: clamp(6px, 2.6vh, 30px) !important; }
+.screen h3 { font-size: clamp(0.85rem, 3vh, 1.4rem) !important; margin-top: clamp(3px, 1.4vh, 12px) !important; }
+.btn-action { padding: clamp(9px, 2.8vh, 20px) clamp(20px, 6vw, 60px) !important; font-size: clamp(0.95rem, 3.6vh, 1.7rem) !important; }
+.leaderboard-container { max-height: 34vh; }
+.table-leaderboard { font-size: clamp(0.78rem, 2.9vh, 1.3rem); }
+.table-leaderboard th, .table-leaderboard td { padding: clamp(4px, 1.2vh, 10px) clamp(6px, 1.6vw, 15px); }
+.button-group { gap: clamp(5px, 1.5vh, 10px); }
+button.btn-general { padding: clamp(7px, 2.2vh, 15px) clamp(8px, 2vw, 25px) !important; font-size: clamp(0.8rem, 3.1vh, 1.2rem) !important; }
+
+/* ---- Roda acak + modal hasil ---- */
+#page-wheel canvas { width: min(66vw, 56vh, 380px) !important; height: auto !important; max-width: none !important; max-height: none !important; }
+.modal { padding: 8px; }
+.modal-content { padding: clamp(12px, 4vh, 40px) clamp(14px, 4vw, 40px) !important; max-height: 94%; overflow: hidden; }
+.modal-content h2 { font-size: clamp(1.2rem, 5.8vh, 2.5rem) !important; margin: clamp(6px, 2vh, 10px) 0 clamp(8px, 2.8vh, 25px) !important; padding: clamp(8px, 2.2vh, 15px) !important; }
+.modal-content p { font-size: clamp(0.85rem, 3.4vh, 1.8rem) !important; }
+.modal-buttons { gap: clamp(8px, 2vw, 15px); }
+.modal-content > button, .modal-buttons > button {
+  font-size: clamp(0.85rem, 3.4vh, 1.6rem) !important;
+  padding: clamp(8px, 2.4vh, 15px) clamp(12px, 3vw, 30px) !important;
+}
+
+/* ---- Game pasangkan lambang pancasila ---- */
+#game-container > h2 { font-size: clamp(0.95rem, 4.4vh, 2.2rem) !important; margin-bottom: clamp(5px, 2.2vh, 25px) !important; }
+#main-content { min-height: 0; }
+.row-sila { min-height: clamp(40px, 12.5vh, 90px) !important; padding: clamp(4px, 1.4vh, 12px) clamp(6px, 1.6vw, 20px) !important; }
+.text-sila { font-size: clamp(0.8rem, 3.3vh, 1.45rem) !important; line-height: 1.3 !important; }
+.box-drop { width: clamp(36px, 11.5vh, 75px); height: clamp(36px, 11.5vh, 75px); }
+.item-lambang { width: clamp(46px, 14.5vh, 105px); height: clamp(46px, 14.5vh, 105px); }
+#pool-container { gap: clamp(5px, 1.6vh, 20px); min-height: 0; padding: clamp(8px, 2.4vh, 25px) clamp(8px, 2vw, 20px); }
+</style>
+<style id="PAKSA-KOMPAK-STYLE">/* ---- Kompak untuk layar HP landscape yang pendek: sisa ruang untuk soal ---- */
+.top-border { margin-top: clamp(2px, 1vh, 15px) !important; margin-bottom: clamp(2px, 1vh, 15px) !important; }
+#game-container { padding: clamp(26px, 7vh, 44px) clamp(8px, 1.8vw, 60px) clamp(6px, 2.4vh, 14px) !important; }
+#main-app-container { padding: clamp(8px, 3.2vh, 30px) !important; }
+#game-container #status-bar { padding-right: clamp(34px, 6vw, 56px) !important; }
+.provinsi-container, .soal-container {
+  margin-top: clamp(2px, 0.8vh, 10px) !important;
+  margin-bottom: clamp(2px, 0.8vh, 10px) !important;
+  padding-top: clamp(2px, 1vh, 10px) !important;
+  padding-bottom: clamp(2px, 1vh, 10px) !important;
+}
+#grid-jawaban, #grid-provinsi {
+  margin-top: clamp(2px, 1vh, 25px) !important;
+  margin-bottom: clamp(3px, 1.2vh, 25px) !important;
+}</style>
+<style id="RODA-ROTATE-STYLE">
+/* ===== OVERLAY PAKSA LANDSCAPE ===== */
+#rodaRotate {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483646;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  text-align: center;
+  color: #eef2ff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background:
+    radial-gradient(900px 500px at 20% -10%, rgba(99,102,241,.55), transparent 60%),
+    radial-gradient(700px 500px at 110% 110%, rgba(34,211,238,.35), transparent 55%),
+    #0b1020;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
+#rodaRotate .rr-inner {
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(8px, 2.5vh, 18px);
+}
+.rr-phone {
+  width: clamp(62px, 17vh, 104px);
+  height: clamp(104px, 30vh, 178px);
+  border: 4px solid #a5b4fc;
+  border-radius: 18px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: rrSpin 2s ease-in-out infinite;
+  box-shadow: 0 14px 44px rgba(99,102,241,.5);
+}
+.rr-phone .rr-screen {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  background: linear-gradient(160deg, rgba(255,255,255,.16), rgba(255,255,255,.05));
+  display: grid;
+  place-items: center;
+  font-size: clamp(22px, 6vh, 38px);
+}
+@keyframes rrSpin {
+  0%, 18% { transform: rotate(0deg); }
+  58%, 100% { transform: rotate(-90deg); }
+}
+.rr-title { font-size: clamp(1.05rem, 5vh, 2rem); font-weight: 800; line-height: 1.25; }
+.rr-title b { color: #22d3ee; }
+.rr-sub {
+  font-size: clamp(0.85rem, 3.2vh, 1.05rem);
+  color: #9aa6c4;
+  max-width: 430px;
+  line-height: 1.5;
+}
+#rodaRotateSkip {
+  margin-top: 2px;
+  border: 1px solid rgba(255,255,255,.22);
+  background: rgba(255,255,255,.08);
+  color: #dbe3ff;
+  padding: clamp(8px, 2vh, 12px) clamp(16px, 4vw, 26px);
+  border-radius: 999px;
+  font-size: clamp(0.78rem, 3vh, 0.95rem);
+  font-weight: 600;
+  cursor: pointer;
+  touch-action: none;
+}
+#rodaRotateSkip:active { transform: scale(.97); }
+</style>
+
 </head>
 <body>
 
@@ -584,5 +811,148 @@
             document.getElementById('info-skor').innerText = `Skor: ${skor}`;
         }
     </script>
+<!-- ===== PAKSA LANDSCAPE + PAS SATU LAYAR (otomatis) ===== -->
+<div id="rodaRotate" aria-hidden="true">
+  <div class="rr-inner">
+    <div class="rr-phone"><div class="rr-screen"><span>&#8635;</span></div></div>
+    <div class="rr-title">PUTAR LAYAR KE MODE <b>LANDSCAPE</b></div>
+    <div class="rr-sub">Supaya soal dan tombol jawaban pilihan ganda tampil lengkap dalam satu layar, tanpa scroll.</div>
+    <button type="button" id="rodaRotateSkip">Tetap lanjut di potret</button>
+  </div>
+</div>
+<script>
+(function () {
+  'use strict';
+  var doc = document, root = doc.documentElement;
+  var overlay = doc.getElementById('rodaRotate');
+  var skip = false, busyFs = false;
+  var inIframe = false;
+  try { inIframe = window.self !== window.top; } catch (e) { inIframe = true; }
+  var hasPlayer = !!doc.querySelector('.player');
+
+  function mq(q) { try { return window.matchMedia(q).matches; } catch (e) { return false; } }
+  function isCoarse() { return mq('(pointer: coarse)') || mq('(any-pointer: coarse)'); }
+  function isPortrait() { return mq('(orientation: portrait)') || window.innerHeight > window.innerWidth; }
+  function isFs() {
+    return !!(doc.fullscreenElement || doc.webkitFullscreenElement || doc.msFullscreenElement || doc.mozFullScreenElement);
+  }
+  function playerOpen() {
+    if (!hasPlayer) return true;
+    var p = doc.querySelector('.player');
+    return !!(p && p.classList.contains('open'));
+  }
+  function canLock() {
+    return !!(window.screen && screen.orientation && typeof screen.orientation.lock === 'function');
+  }
+  function lockLandscape() {
+    try {
+      var o = screen.orientation || screen.msOrientation || screen.mozOrientation;
+      if (o && typeof o.lock === 'function') {
+        var p = o.lock('landscape');
+        if (p && typeof p.catch === 'function') p.catch(function () {});
+      }
+    } catch (e) {}
+  }
+  function refreshOverlay() {
+    if (!overlay) return;
+    var show = !skip && isCoarse() && isPortrait() && playerOpen();
+    overlay.style.display = show ? 'flex' : 'none';
+  }
+  function finishFs() { setTimeout(function () { busyFs = false; }, 700); }
+
+  function autoFullscreen() {
+    if (skip || busyFs) return;
+    if (isFs()) { lockLandscape(); return; }
+    if (!isCoarse() || !playerOpen() || !canLock()) return;
+    if (inIframe) {
+      try { window.parent.postMessage({ rodaForceLandscape: 1 }, '*'); } catch (e) {}
+      return;
+    }
+    var r = root.requestFullscreen || root.webkitRequestFullscreen || root.msFullscreenElement && root.msRequestFullscreen;
+    if (!r) return;
+    busyFs = true;
+    try {
+      var res = r.call(root);
+      if (res && typeof res.then === 'function') {
+        res.then(function () { lockLandscape(); finishFs(); }, function () { finishFs(); });
+      } else { lockLandscape(); finishFs(); }
+    } catch (e) { busyFs = false; }
+  }
+
+  ['fullscreenchange', 'webkitfullscreenchange', 'msfullscreenchange', 'mozfullscreenchange'].forEach(function (ev) {
+    doc.addEventListener(ev, function () { if (isFs()) lockLandscape(); refreshOverlay(); fitAll(); });
+  });
+  window.addEventListener('message', function (e) {
+    if (e && e.data && e.data.rodaForceLandscape) autoFullscreen();
+  });
+  window.addEventListener('resize', function () { refreshOverlay(); fitAll(); });
+  window.addEventListener('orientationchange', function () {
+    refreshOverlay();
+    setTimeout(function () { fitAll(); refreshOverlay(); }, 260);
+  });
+  doc.addEventListener('touchstart', function (e) {
+    try {
+      if (e.target && e.target.closest &&
+          e.target.closest('#rodaRotateSkip, [onclick*="ullscreen"], .btn-fullscreen, #btn-fullscreen, #fsBtn')) return;
+    } catch (err) {}
+    autoFullscreen();
+  }, { passive: true });
+
+  var skipBtn = doc.getElementById('rodaRotateSkip');
+  if (skipBtn) skipBtn.addEventListener('click', function () {
+    skip = true;
+    refreshOverlay();
+    try {
+      if (isFs()) (doc.exitFullscreen || doc.webkitExitFullscreen || doc.msExitFullscreen).call(doc);
+    } catch (e) {}
+  });
+
+  /* --- Pastikan teks soal selalu muat di kotaknya (auto shrink) --- */
+  function fitSoalEl(el) {
+    var box = el.parentElement;
+    if (!box) return;
+    var h = box.clientHeight;
+    if (h < 20) return;
+    var cs = window.getComputedStyle(box);
+    var others = 0, count = 0, i, c;
+    for (i = 0; i < box.children.length; i++) {
+      c = box.children[i];
+      if (c === el || !c.offsetHeight) continue;
+      others += c.offsetHeight;
+      count++;
+    }
+    var gap = parseFloat(cs.rowGap) || 0;
+    var avail = h - (parseFloat(cs.paddingTop) || 0) - (parseFloat(cs.paddingBottom) || 0) - others - gap * count;
+    if (avail < 24) avail = Math.max(24, Math.round(h * 0.6));
+    el.style.maxHeight = avail + 'px';
+    el.style.fontSize = '';
+    var size = parseFloat(window.getComputedStyle(el).fontSize) || 16, guard = 0;
+    while (el.scrollHeight > el.clientHeight + 1 && size > 9 && guard++ < 40) {
+      size = Math.max(9, size - Math.max(0.8, size * 0.07));
+      el.style.fontSize = size.toFixed(2) + 'px';
+    }
+  }
+  function fitAll() {
+    var list = doc.querySelectorAll('#target-soal, #target-lagu, #target-suku, .provinsi-container > div, .soal-container > div');
+    for (var i = 0; i < list.length; i++) {
+      try { fitSoalEl(list[i]); } catch (e) {}
+    }
+  }
+  try {
+    var mo = new MutationObserver(function () { fitAll(); });
+    mo.observe(doc.body, {
+      subtree: true, childList: true, characterData: true,
+      attributes: true, attributeFilter: ['class']
+    });
+  } catch (e) {}
+
+  fitAll();
+  refreshOverlay();
+  window.addEventListener('load', function () { fitAll(); refreshOverlay(); });
+  setTimeout(function () { fitAll(); refreshOverlay(); }, 250);
+  setTimeout(function () { fitAll(); refreshOverlay(); }, 1200);
+})();
+</script>
+
 </body>
 </html>

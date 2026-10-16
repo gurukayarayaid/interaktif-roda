@@ -237,6 +237,81 @@
     .bar .newtab { display: none; }
   }
 </style>
+<style id="RODA-ROTATE-STYLE">
+/* ===== OVERLAY PAKSA LANDSCAPE ===== */
+#rodaRotate {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483646;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  text-align: center;
+  color: #eef2ff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background:
+    radial-gradient(900px 500px at 20% -10%, rgba(99,102,241,.55), transparent 60%),
+    radial-gradient(700px 500px at 110% 110%, rgba(34,211,238,.35), transparent 55%),
+    #0b1020;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
+#rodaRotate .rr-inner {
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(8px, 2.5vh, 18px);
+}
+.rr-phone {
+  width: clamp(62px, 17vh, 104px);
+  height: clamp(104px, 30vh, 178px);
+  border: 4px solid #a5b4fc;
+  border-radius: 18px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: rrSpin 2s ease-in-out infinite;
+  box-shadow: 0 14px 44px rgba(99,102,241,.5);
+}
+.rr-phone .rr-screen {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  background: linear-gradient(160deg, rgba(255,255,255,.16), rgba(255,255,255,.05));
+  display: grid;
+  place-items: center;
+  font-size: clamp(22px, 6vh, 38px);
+}
+@keyframes rrSpin {
+  0%, 18% { transform: rotate(0deg); }
+  58%, 100% { transform: rotate(-90deg); }
+}
+.rr-title { font-size: clamp(1.05rem, 5vh, 2rem); font-weight: 800; line-height: 1.25; }
+.rr-title b { color: #22d3ee; }
+.rr-sub {
+  font-size: clamp(0.85rem, 3.2vh, 1.05rem);
+  color: #9aa6c4;
+  max-width: 430px;
+  line-height: 1.5;
+}
+#rodaRotateSkip {
+  margin-top: 2px;
+  border: 1px solid rgba(255,255,255,.22);
+  background: rgba(255,255,255,.08);
+  color: #dbe3ff;
+  padding: clamp(8px, 2vh, 12px) clamp(16px, 4vw, 26px);
+  border-radius: 999px;
+  font-size: clamp(0.78rem, 3vh, 0.95rem);
+  font-weight: 600;
+  cursor: pointer;
+  touch-action: none;
+}
+#rodaRotateSkip:active { transform: scale(.97); }
+</style>
+
 </head>
 <body>
 
@@ -496,5 +571,148 @@ document.addEventListener("keydown", e => {
 buildFilters();
 render();
 </script>
+<!-- ===== PAKSA LANDSCAPE + PAS SATU LAYAR (otomatis) ===== -->
+<div id="rodaRotate" aria-hidden="true">
+  <div class="rr-inner">
+    <div class="rr-phone"><div class="rr-screen"><span>&#8635;</span></div></div>
+    <div class="rr-title">PUTAR LAYAR KE MODE <b>LANDSCAPE</b></div>
+    <div class="rr-sub">Supaya soal dan tombol jawaban pilihan ganda tampil lengkap dalam satu layar, tanpa scroll.</div>
+    <button type="button" id="rodaRotateSkip">Tetap lanjut di potret</button>
+  </div>
+</div>
+<script>
+(function () {
+  'use strict';
+  var doc = document, root = doc.documentElement;
+  var overlay = doc.getElementById('rodaRotate');
+  var skip = false, busyFs = false;
+  var inIframe = false;
+  try { inIframe = window.self !== window.top; } catch (e) { inIframe = true; }
+  var hasPlayer = !!doc.querySelector('.player');
+
+  function mq(q) { try { return window.matchMedia(q).matches; } catch (e) { return false; } }
+  function isCoarse() { return mq('(pointer: coarse)') || mq('(any-pointer: coarse)'); }
+  function isPortrait() { return mq('(orientation: portrait)') || window.innerHeight > window.innerWidth; }
+  function isFs() {
+    return !!(doc.fullscreenElement || doc.webkitFullscreenElement || doc.msFullscreenElement || doc.mozFullScreenElement);
+  }
+  function playerOpen() {
+    if (!hasPlayer) return true;
+    var p = doc.querySelector('.player');
+    return !!(p && p.classList.contains('open'));
+  }
+  function canLock() {
+    return !!(window.screen && screen.orientation && typeof screen.orientation.lock === 'function');
+  }
+  function lockLandscape() {
+    try {
+      var o = screen.orientation || screen.msOrientation || screen.mozOrientation;
+      if (o && typeof o.lock === 'function') {
+        var p = o.lock('landscape');
+        if (p && typeof p.catch === 'function') p.catch(function () {});
+      }
+    } catch (e) {}
+  }
+  function refreshOverlay() {
+    if (!overlay) return;
+    var show = !skip && isCoarse() && isPortrait() && playerOpen();
+    overlay.style.display = show ? 'flex' : 'none';
+  }
+  function finishFs() { setTimeout(function () { busyFs = false; }, 700); }
+
+  function autoFullscreen() {
+    if (skip || busyFs) return;
+    if (isFs()) { lockLandscape(); return; }
+    if (!isCoarse() || !playerOpen() || !canLock()) return;
+    if (inIframe) {
+      try { window.parent.postMessage({ rodaForceLandscape: 1 }, '*'); } catch (e) {}
+      return;
+    }
+    var r = root.requestFullscreen || root.webkitRequestFullscreen || root.msFullscreenElement && root.msRequestFullscreen;
+    if (!r) return;
+    busyFs = true;
+    try {
+      var res = r.call(root);
+      if (res && typeof res.then === 'function') {
+        res.then(function () { lockLandscape(); finishFs(); }, function () { finishFs(); });
+      } else { lockLandscape(); finishFs(); }
+    } catch (e) { busyFs = false; }
+  }
+
+  ['fullscreenchange', 'webkitfullscreenchange', 'msfullscreenchange', 'mozfullscreenchange'].forEach(function (ev) {
+    doc.addEventListener(ev, function () { if (isFs()) lockLandscape(); refreshOverlay(); fitAll(); });
+  });
+  window.addEventListener('message', function (e) {
+    if (e && e.data && e.data.rodaForceLandscape) autoFullscreen();
+  });
+  window.addEventListener('resize', function () { refreshOverlay(); fitAll(); });
+  window.addEventListener('orientationchange', function () {
+    refreshOverlay();
+    setTimeout(function () { fitAll(); refreshOverlay(); }, 260);
+  });
+  doc.addEventListener('touchstart', function (e) {
+    try {
+      if (e.target && e.target.closest &&
+          e.target.closest('#rodaRotateSkip, [onclick*="ullscreen"], .btn-fullscreen, #btn-fullscreen, #fsBtn')) return;
+    } catch (err) {}
+    autoFullscreen();
+  }, { passive: true });
+
+  var skipBtn = doc.getElementById('rodaRotateSkip');
+  if (skipBtn) skipBtn.addEventListener('click', function () {
+    skip = true;
+    refreshOverlay();
+    try {
+      if (isFs()) (doc.exitFullscreen || doc.webkitExitFullscreen || doc.msExitFullscreen).call(doc);
+    } catch (e) {}
+  });
+
+  /* --- Pastikan teks soal selalu muat di kotaknya (auto shrink) --- */
+  function fitSoalEl(el) {
+    var box = el.parentElement;
+    if (!box) return;
+    var h = box.clientHeight;
+    if (h < 20) return;
+    var cs = window.getComputedStyle(box);
+    var others = 0, count = 0, i, c;
+    for (i = 0; i < box.children.length; i++) {
+      c = box.children[i];
+      if (c === el || !c.offsetHeight) continue;
+      others += c.offsetHeight;
+      count++;
+    }
+    var gap = parseFloat(cs.rowGap) || 0;
+    var avail = h - (parseFloat(cs.paddingTop) || 0) - (parseFloat(cs.paddingBottom) || 0) - others - gap * count;
+    if (avail < 24) avail = Math.max(24, Math.round(h * 0.6));
+    el.style.maxHeight = avail + 'px';
+    el.style.fontSize = '';
+    var size = parseFloat(window.getComputedStyle(el).fontSize) || 16, guard = 0;
+    while (el.scrollHeight > el.clientHeight + 1 && size > 9 && guard++ < 40) {
+      size = Math.max(9, size - Math.max(0.8, size * 0.07));
+      el.style.fontSize = size.toFixed(2) + 'px';
+    }
+  }
+  function fitAll() {
+    var list = doc.querySelectorAll('#target-soal, #target-lagu, #target-suku, .provinsi-container > div, .soal-container > div');
+    for (var i = 0; i < list.length; i++) {
+      try { fitSoalEl(list[i]); } catch (e) {}
+    }
+  }
+  try {
+    var mo = new MutationObserver(function () { fitAll(); });
+    mo.observe(doc.body, {
+      subtree: true, childList: true, characterData: true,
+      attributes: true, attributeFilter: ['class']
+    });
+  } catch (e) {}
+
+  fitAll();
+  refreshOverlay();
+  window.addEventListener('load', function () { fitAll(); refreshOverlay(); });
+  setTimeout(function () { fitAll(); refreshOverlay(); }, 250);
+  setTimeout(function () { fitAll(); refreshOverlay(); }, 1200);
+})();
+</script>
+
 </body>
 </html>
